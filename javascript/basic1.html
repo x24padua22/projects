@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	
+	<style type="text/css">
+		*{
+			font-family: Arial, sans;
+			
+		}
+		
+		#wrapper{
+			width: 800px;
+			padding: 20px 30px;
+			margin: 0px auto;
+		}
+		
+		.tasks_header{
+			list-style: none;
+		}
+		
+		.p_style{
+			color:#gray;
+			font-size: .9em;
+		}
+	</style>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("tasks").before("<h1>Tasks for the day</h1>");
+			
+			$("ul li").addClass("tasks_header");
+			$("ul li p").addClass("tasks_easy");
+			$("ul li:nth-child(3) p").removeClass("tasks_easy").addClass("tasks_hard");
+			
+			$(".tasks_easy").append("<strong>Do this in 1 hour.</strong>");
+			$(".tasks_hard").append("<strong>Do this in 2 hours.</strong>");
+			
+			$("#tasks").after("<h3>Good Luck!</h3>");
+			
+			var title = $("em").attr("title");
+			$("span").text(title);
+
+		});
+	</script>
+</head>
+<body>
+	<div id="wrapper">
+		<div id="tasks">
+			<ul>
+				<li>
+					<h2>Task 1</h2>
+					<p>Create a website that uses this and 
+						<em title="you know what it meant :)">that</em>.
+					</p>
+				</li>
+				<li>
+					<h2>Task 2</h2>
+					<p>Create a website that does this and not 
+						<em>that</em>.
+					</p>
+				</li>
+				<li>
+					<h2>Task 3</h2>
+					<p>Create a website that makes use of this and then does 
+						<em>that</em>.
+					</p>
+				</li>
+			</ul>
+			<p>Note: "That" from the instructions meant: <span></span></p>
+		</div>
+	
+	</div>
+</body>
+</html>
