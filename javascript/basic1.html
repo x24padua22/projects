@@ -43,6 +43,10 @@
 			var title = $("em").attr("title");
 			$("span").text(title);
 
+			$("#tasks").click(function(){
+			
+				$(this).css('background-color', 'red').html("Hi Rozen!");
+			});
 		});
 	</script>
 </head>
@@ -68,8 +72,10 @@
 						<em>that</em>.
 					</p>
 				</li>
+				<li>
+					<p>Note: "That" from the instructions meant: <span></span></p>
+				</li>
 			</ul>
-			<p>Note: "That" from the instructions meant: <span></span></p>
 		</div>
 	
 	</div>
