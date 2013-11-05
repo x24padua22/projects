@@ -6,6 +6,7 @@
 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
 	<style type="text/css">
 		#wrapper{
+			font-size: .85em;
 			width: 800px;
 			margin: 0px auto;
 		}
@@ -16,7 +17,7 @@
 		
 		#name_address{
 			float: left;
-		}		
+		}
 		
 		button{
 			float: right;
@@ -30,7 +31,7 @@
 			$("#tabs").tabs();
 			
 			$("#accordion").accordion({
-				heightStyle: "fill"
+				heightStyle: "contain"
 			});
 				
 			$("#from").datepicker({
@@ -123,11 +124,12 @@
 					<div>
 						<form>
 							<div id="name_address">
-								<label for="">First Name: </label><input type="text" />
-								<label for="">Last Name: </label><input type="text" />
-								<label for="">Email Address: </label><input type="text" />
-								<label for="">Other requests</label><textarea name=""></textarea>
+								<div><label for="">First Name: </label><input type="text" /></div>
+								<div><label for="">Last Name: </label><input type="text" /></div>
+								<div><label for="">Email Address: </label><input type="text" /></div>
+								<div><label for="">Other requests: </label><textarea name=""></textarea></div>
 							</div>
+							<div class="clear"></div>
 							<button id="reserve">Submit Reservation</button>
 							<div class="clear"></div>
 						</form>

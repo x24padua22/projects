@@ -3,11 +3,11 @@
 <head>
 	<meta charset="UTF-8">
 	<title></title>
-	
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
 	<style type="text/css">
 		*{
 			font-family: Arial, sans;
-			
+			margin: 0px;
 		}
 		
 		#wrapper{
@@ -16,48 +16,182 @@
 			margin: 0px auto;
 		}
 		
+		.float_right{
+			float: right;
+		}
+		
+		.clear{
+			clear: both;
+		}
+		
+		#tasks ul{
+			padding: 0px;
+		}
+		
+		#tasks ul li{
+			background-color: #F5F5F5;
+			padding: 10px;
+			border: 1px solid lightgray;
+			border-radius: 5px;
+			margin: 5px;
+		}
+		
 		.tasks_header{
 			list-style: none;
 		}
 		
-		.p_style{
-			color:#gray;
-			font-size: .9em;
+		h3{
+			margin: 10px 30px;
+		}
+		
+		#samples{
+			padding: 5px 10px;
+			border: 1px solid #000;
+			margin: 0px 30px;
+		}
+		
+		#samples div{
+			padding-bottom: 10px;
+			border-bottom: 1px dashed lightgray;
+			margin-bottom: 10px;
+		}
+		
+		#samples div:last-child{
+			border-bottom: 0px;
+			margin-bottom: 0px;
+		}
+		
+		.well{
+			background-color: lightgray;
+			padding: 15px;
+			border-radius: 10px;
+			margin: 5px 50px;
+		}
+		
+		#float_left{
+			float: left;
+		}
+		
+		.float_right ul{
+			padding: 0px;
+		}
+		
+		.float_right ul li{
+			list-style: none;
+		}
+		
+		.float_right ul li button{
+			list-style: none;
+			background-color: lightgreen;
+			width: 100px;
+			padding: 1px;
+			border: 1px solid green;
+			border-radius: 5px;
+			margin: 5px;
+		}
+		
+		#samples #float_left{
+			margin: 25px 30px;
+		}
+		
+		input{
+			margin: 20px 0px;
 		}
 	</style>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	
+	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
+			
+			
 			$("tasks").before("<h1>Tasks for the day</h1>");
 			
-			$("ul li").addClass("tasks_header");
-			$("ul li p").addClass("tasks_easy");
-			$("ul li:nth-child(3) p").removeClass("tasks_easy").addClass("tasks_hard");
+			$("#tasks ul li").addClass("tasks_header");
+			$("#tasks ul li p").addClass("tasks_easy");
+			$("#tasks ul li:nth-child(3) p").removeClass("tasks_easy").addClass("tasks_hard");
 			
 			$(".tasks_easy").append("<strong>Do this in 1 hour.</strong>");
 			$(".tasks_hard").append("<strong>Do this in 2 hours.</strong>");
 			
-			$("#tasks").after("<h3>Good Luck!</h3>");
+			$("#tasks ul").after("<h3>Good Luck!</h3>");
 			
 			var title = $("em").attr("title");
-			$("span").text(title);
-
-			$("#tasks").click(function(){
+			$("#em_attribute").html(title);
 			
-				$(this).css('background-color', 'red').html("Hi Rozen!");
+			$("#samples div:first-child div").text('<a href="#somewhere">Link</a> to redirect somewhere');
+			
+			$("#samples div:nth-child(2) strong").click(function(){
+				$("#change_text li").toggle();
 			});
+			
+			$("input").focus;
+			
+			$("#form_effects").submit(function(){
+				var input_text = $("#in").val();
+				$("#user_input").text(input_text);
+				
+				return false;
+			});
+			
+			$("#hide_text").click(function (){
+				$("#user_input").hide("slow");
+				
+				return false;
+			});
+			$("#show_text").click(function (){
+				$("#user_input").show("slow");
+				
+				return false;
+			});
+			$("#slide_up").click(function (){
+				$("#user_input").slideUp("slow");
+				
+				return false;
+			});
+			$("#slide_down").click(function (){
+				$("#user_input").slideDown("slow");
+				
+				return false;
+			});
+			$("#slide_toggle").click(function (){
+				$("#user_input").slideToggle("slow");
+				
+				return false;
+			});
+			$("#fade_out").click(function (){
+				$("#user_input").fadeOut("slow");
+				
+				return false;
+			});
+			$("#fade_in").click(function (){
+				$("#user_input").fadeIn("slow");
+				
+				return false;
+			});
+			
+			function showValues(){
+				var str = $("#form2").serialize();
+				$("#results").text(str);
+			}
+			$("input[type='checkbox'], input[type='radio']").on("click", showValues);
+			$("select").on("change", showValues);
+			showValues();
 		});
+		
 	</script>
 </head>
 <body>
+	
+	
 	<div id="wrapper">
+		<h1 class="float_right">Hello<span id="name"></span>!</h1>
+		<div class="clear"></div>
 		<div id="tasks">
 			<ul>
 				<li>
 					<h2>Task 1</h2>
 					<p>Create a website that uses this and 
-						<em title="you know what it meant :)">that</em>.
+						<em title="you know what that meant :)">that</em>.
 					</p>
 				</li>
 				<li>
@@ -72,10 +206,74 @@
 						<em>that</em>.
 					</p>
 				</li>
-				<li>
-					<p>Note: "That" from the instructions meant: <span></span></p>
-				</li>
 			</ul>
+		</div>
+		<div id="samples">
+			<div>
+				<h4>Note:</h4>
+				<p><small>"That" from the instructions meant something like: </small></p>
+				<div class="well"></div>
+				<p><small id="em_attribute"></small></p>
+			</div>
+			<div>
+				<h4>Sample for Task 2</h4>
+				<div class="well">
+					<p><strong>Click Me!</strong></p>
+					<ul id="change_text">
+						<li>Change me.</li>
+						<li style="display:none">You did it!</li>
+					</ul>
+				</div>
+			</div>
+			<div>
+				<h4>Other things you can do</h4>
+				<div class="well">
+					<form id="form_effects" action="">
+						<div id="float_left">
+							<p>Please enter some text</p>
+							<p>Then click on the buttons on the right to see their effect.</p>
+							<input type="text" id="in" />
+							<input type="submit" />
+							<p id="user_input"></p>
+						</div>
+						<div class="float_right">
+							<ul>
+								<li id="hide_text"><button>Hide</button></li>
+								<li id="show_text"><button>Show</button></li>
+								<li id="slide_up"><button>Slide Up</button></li>
+								<li id="slide_down"><button>Slide Down</button></li>
+								<li id="slide_toggle"><button>Slide Toggle</button></li>
+								<li id="fade_out"><button>Fade Out</button></li>
+								<li id="fade_in"><button>Fade In</button></li>
+							</ul>
+						</div>
+						<div class="clear"></div>
+					</form>
+				</div>
+				<div class="well">
+					<form id="form2" action="">
+						<select name="gender" id="">
+							<option value="female">Female</option>
+							<option value="male">Male</option>
+						</select>
+						
+						<input type="checkbox" name="colors" value="yellow" />
+						<label for="cb1">Yellow</label>
+						<input type="checkbox" name="colors" value="blue" />
+						<label for="cb2">Blue</label>
+						<input type="checkbox" name="colors" value="green" checked="checked" />
+						<label for="cb3">Green</label>
+						
+						<input type="radio" name="size" value="small" checked="checked" />
+						<label for="r1">Small</label>
+						<input type="radio" name="size" value="medium" />
+						<label for="r2">Medium</label>
+						<input type="radio" name="size" value="large" />
+						<label for="r3">Large</label>
+					</form>
+					<p id="results"></p>
+				</div>
+			</div>
 		</div>
 	
 	</div>
