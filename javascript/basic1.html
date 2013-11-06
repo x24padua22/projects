@@ -76,9 +76,11 @@
 			});
 			
 			function showValues(){
+				//serialize will be use later of ajax handled form submission/ form submit without refresh
 				var str = $("#form2").serialize();
 				$("#results").text(str);
 			}
+
 			$("input[type='checkbox'], input[type='radio']").on("click", showValues);
 			$("select").on("change", showValues);
 			showValues();
