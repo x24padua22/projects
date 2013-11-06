@@ -1,0 +1,17 @@
+#wrapper{
+	font-size: .85em;
+	width: 800px;
+	margin: 0px auto;
+}
+
+.clear{
+	clear: both;
+}
+
+#name_address{
+	float: left;
+}
+
+button{
+	float: right;
+}

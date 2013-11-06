@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link href="validetta/validetta.css" rel="stylesheet" type="text/css" media="screen" >
+	<link href="css/css_plugin.css" rel="stylesheet" type="text/css" media="screen" >
+
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script type="text/javascript" src="validetta/validetta.js"></script>   
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#register").validetta({
+				realTime : true
+			});
+			
+			$("#main").hide();
+			
+			$("#submit").click(function() {
+				var user_name = $("#first_name").val();
+				if (user_name !== ""){
+					$("#main").show();
+					$("#form").hide();
+					$("#name").html(", " + user_name);
+					
+					return false;
+				}
+			});
+			
+			$("#mokona1").click(function(){
+				$("#mokona1").hide();
+				
+				return false;
+			});
+			$("#mokona2").click(function(){
+				$("#mokona2").hide();
+				$("mokona2").show();
+				return false;
+			});
+			$("#mokona3").click(function(){
+				$("#mokona3").hide();
+				
+				return false;
+			});
+			$("#mokona4").click(function(){
+				$("#mokona4").hide();
+				
+				return false;
+			});
+			$("#mokona5").click(function(){
+				$("#mokona5").hide();
+				
+				return false;
+			});
+			$("#mokona6").click(function(){
+				$("#mokona6").hide();
+				
+				return false;
+			});
+			$("#mokona7").click(function(){
+				$("#mokona7").hide();
+				
+				return false;
+			});
+			$("#mokona8").click(function(){
+				$("#mokona8").hide();
+				
+				return false;
+			});
+			
+			$("a").click(function(){
+				$("img").show();
+			});
+
+		});
+	</script>
+	
+</head>
+<body>
+	<div id="wrapper">
+		<div id="form">
+			<form id="register" method="POST" action="#">
+				<ul>
+					<li>
+						<label for="">First Name</label>
+						<input type="text" id="first_name" name="first_name" data-validetta="required,minLength[1],maxLength[30]" 
+						placeholder="First Name" class="required" />
+					</li>
+					<li>
+						<label for="">Last Name</label>
+						<input type="text" name="last_name" data-validetta="minLength[2],maxLength[30]" placeholder="Last Name" />
+					</li>
+					<li>
+						<label for="">Email</label>
+						<input type="text" name="email" data-validetta="email" placeholder="Email" />
+					</li>
+					<li>
+						<input type="submit" id="submit" />
+					</li>
+				</ul>  
+			</form>
+		</div>
+		<div id="main">
+			<h1>Hello<span id="name"></span>!</h1>
+			<div class="clear"></div>
+			<div>
+				<div class="container">
+					<img id="mokona1" src="images/mokona.jpg" alt="mokona" />
+				</div>
+				<div class="container">
+					<img id="mokona2" src="images/mokona.jpg" alt="mokona" />
+				</div>
+				<div class="container">
+					<img id="mokona3" src="images/mokona.jpg" alt="mokona" />
+				</div>
+				<div class="container">
+					<img id="mokona4" src="images/mokona.jpg" alt="mokona" />
+				</div>
+				<div class="container">
+					<img id="mokona5" src="images/mokona.jpg" alt="mokona" />
+				</div>
+				<div class="container">
+					<img id="mokona6" src="images/mokona.jpg" alt="mokona" />
+				</div>
+				<div class="container">
+					<img id="mokona7" src="images/mokona.jpg" alt="mokona" />
+				</div>
+				<div class="container">
+					<img id="mokona8" src="images/mokona.jpg" alt="mokona" />
+				</div>
+				<div class="clear"></div>
+			</div>
+			<a type="submit">Restore</a>
+			<div class="clear"></div>
+		</div>
+	</div>
+</body>
+</html>
