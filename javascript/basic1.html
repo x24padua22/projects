@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<title></title>
 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-	<link rel="stylesheet" src="css/basic.css">
+	<link rel="stylesheet" href="css/basic1.css">
 
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
@@ -77,7 +77,7 @@
 			
 			function showValues(){
 				//serialize will be use later of ajax handled form submission/ form submit without refresh
-				var str = $("#form2").serialize();
+				var str = $("#serialize_form").serialize();
 				$("#results").text(str);
 			}
 
@@ -156,7 +156,7 @@
 					</form>
 				</div>
 				<div class="well">
-					<form id="form2" action="">
+					<form id="serialize_form" action="">
 						<select name="gender" id="">
 							<option value="female">Female</option>
 							<option value="male">Male</option>
