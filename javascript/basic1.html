@@ -25,13 +25,11 @@
 			$("#em_attribute").html(title);
 			
 			$("#samples div:first-child div").text('<a href="#somewhere">Link</a> to redirect somewhere');
-			
 			$("#samples div:nth-child(2) strong").click(function(){
 				$("#change_text li").toggle();
 			});
 			
 			$("input").focus;
-			
 			$("#form_effects").submit(function(){
 				var input_text = $("#in").val();
 				$("#user_input").text(input_text);
@@ -76,11 +74,9 @@
 			});
 			
 			function showValues(){
-				//serialize will be use later of ajax handled form submission/ form submit without refresh
 				var str = $("#serialize_form").serialize();
 				$("#results").text(str);
 			}
-
 			$("input[type='checkbox'], input[type='radio']").on("click", showValues);
 			$("select").on("change", showValues);
 			showValues();
