@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	
+	<link rel="stylesheet" href="css/hotel_new.css" />
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#reservation").hide();
+			$("#rooms").hide();
+			$("#personal_info").hide();
+			$("#duration").hide();
+			
+			$("#nav_reservation").click(function(){
+				$("#home").hide();
+				$("#reservation").show();
+				
+				return false;
+			});
+			
+			$("#from").datepicker({
+				onSelect: function(from_date, inst){
+					$("#from").val(from_date);
+					$("#to").after("<p>You have chosen "+ from_date +"</p>");
+				}
+			});
+			
+			$("#to").datepicker({
+				onSelect: function(to_date, inst){
+					$("#to").val(to_date);
+					$("p").after("<p> to "+ to_date +".</p>");
+				}
+			});
+			
+			$("#date_submit").click(function(){
+				$("#date").hide()
+				$("#rooms").show();
+				
+				return false;
+			});
+			
+			$("#room_submit").click(function(){
+				$("#rooms").hide()
+				$("#personal_info").show();
+				
+				return false;
+			});
+		
+		});
+	</script>
+</head>
+<body>
+	<div id="wrapper">
+		<div id="header">
+			<h1>HOTEL <em>hotel</em></h1>
+		</div>
+		<div id="navigation">
+			<ul>
+				<li><a href="">Home</a></li>
+				<li><a id="nav_reservation" href="">Reservation</a></li>
+			</ul>
+		</div>
+		<div id="contents">
+			<div id="home">
+				<img src="images/hotel.jpg" alt="hotel" />
+				<div>
+					<p>"Madman! look through my eyes if thou hast none of thine own."</p>
+					<p>"What! how can you see better of a dark night than anybody else, never mind how foolish?"</p>
+					<p>"Here!" cried Starbuck, seizing Stubb by the shoulder, and pointing his hand towards the weather bow, 
+					"markest thou not that the gale comes from the eastward, the very course Ahab is to run for Moby Dick? 
+					the very course he swung to this day noon? now mark his boat there; where is that stove? In the stern-sheets, man; 
+					where he is wont to stand&mdash;his stand-point is stove, man! Now jump overboard, and sing away, if thou must!</p>
+					<p>"I don't half understand ye: what's in the wind?"</p>
+				</div>
+			</div>
+			<div id="reservation">
+				<form action="" id="date">
+					<label for="">Check In</label>
+					<input type="datepicker" id="from"/>
+					<label for="">Check Out</label>
+					<input type="datepicker" id="to"/>
+					<input id="date_submit" type="submit" value="Continue" />
+				</form>
+				<form action="" id="rooms">
+					<select name="number_of_rooms" id="">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+					</select>
+					<select name="room_type" id="">
+						<option value="executive">Executive</option>
+						<option value="deluxe">Deluxe</option>
+						<option value="economy">Economy</option>
+					</select>
+					<input id="room_submit" type="submit" value="Continue" />
+				</form>
+				<form action="" id="personal_info">
+					<label for="">First Name</label>
+					<input type="text" name="fname" placeholder="First Name" />
+					<label for="">Last Name</label>
+					<input type="text" name="lname" placeholder="Last Name" />
+					<label for="">Email</label>
+					<input type="text" name="email" placeholder="Email" />
+					<label for="">Other requests: </label>
+					<textarea name="requests" placeholder="Food, transportation, etc."></textarea>
+					<input id="info_submit" type="submit" value="Reserve" />
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
