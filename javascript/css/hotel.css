@@ -8,13 +8,15 @@
 	clear: both;
 }
 
-#name_address{
-	float: left;
-}
-
 label{
 	display: block;
 	margin-top: 10px;
+}
+
+#check_in_out p{
+	color: gray;
+	font-size: .8em;
+	display: inline;
 }
 
 input[type="submit"]{
