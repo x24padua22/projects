@@ -1,0 +1,1 @@
+I merged the plugin(from basic assignment), hide/show image(from intermediate), and drag/change image(from intermediate II assignments).
