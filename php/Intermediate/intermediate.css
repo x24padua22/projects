@@ -1,0 +1,29 @@
+#wrapper{
+	width: 800px;
+	margin: 10px auto;
+}
+
+input[name=golds_earned]{
+	width: 15px;
+	padding: 0px 5px;
+}
+
+div.buildings{
+	text-align: center;
+	float: left;
+	width: 178px;
+	padding: 10px 5px;
+	border:1px solid #000;
+	margin: 15px 5px;
+}
+
+.clear{
+	clear: both;
+}
+
+textarea{
+	font-size: 1.3em;
+	width: 630px;
+	height: 100px;
+	margin: 0px 85px;
+}
