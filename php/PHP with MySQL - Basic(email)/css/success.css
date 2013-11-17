@@ -1,0 +1,16 @@
+*{
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+#wrapper{
+	width: 400px;
+	padding: 30px 50px;
+	margin: 0px auto;
+	border:1px solid #000;
+}
+
+#success{
+	background-color: lightgreen;
+	padding: 5px;
+	border:1px solid #000;
+}

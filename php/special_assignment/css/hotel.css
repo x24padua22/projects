@@ -1,0 +1,42 @@
+*{
+	font-family: Arial, Helvetica, sans-serif;
+	margin: 0px;
+}
+
+#wrapper{
+	width: 1000px;
+	margin: 0px auto;
+}
+
+.error{
+	font-size: .8em;
+	background-color: red;
+	padding: 5px 10px;
+	border:1px solid #000;
+	margin: 0px 20px;
+}
+
+#admin_login_form{
+	font-size: .8em;
+	float: right;
+	margin-top: 10px;
+}
+
+#clear{
+	clear: both;
+}
+
+div:nth-child(3){
+	padding: 20px 50px;
+	border:1px solid #000;
+	margin: 40px 200px;
+}
+
+#reservation_form label{
+	display: block;
+	padding-top: 10px;
+}
+
+#reservation_form input[type=submit]{
+	float: right;
+}
