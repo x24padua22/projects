@@ -19,12 +19,16 @@
 			else
 			{
 				$_SESSION["success"][$email] = "The email address you entered '" . $email . "' is a VALID email address! Thank you!";
-				$query = "INSERT INTO emails (email_address, created_at) VALUES('" . $post["email"] . "', NOW())";
-				mysql_query($query);
-				$user = mysql_insert_id($connection);
+				$add_email_query = "INSERT INTO emails (email_address, created_at) VALUES('" . $post["email"] . "', NOW())";
+				$add_email = mysql_query($add_email_query);
 				
-				header("Location: success.php?id=" . $user);
-				exit;
+				if($add_email == TRUE)
+				{
+					$user_id = mysql_insert_id($connection);
+					
+					header("Location: success.php?id=" . $user_id);
+					exit;
+				}
 			}
 		}
 	}

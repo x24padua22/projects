@@ -63,15 +63,15 @@
 			$_SESSION["success"] = "Thank you, " . $post["first_name"] . ". You have successfully registered!";
 			$add_student_query = "INSERT INTO students (first_name, last_name, email, pic_url, created_at) 
 					VALUES ('" . $post["first_name"] . "', '" . $post["last_name"] . "', '" . $post["email"] . "', '" . $file_name . "', NOW())";
-			mysql_query($add_student_query);
-			$user_id = mysql_insert_id($connection);
+			$add_student = mysql_query($add_student_query);
+			$new_student_id = mysql_insert_id($connection);
 			
 			$students = fetchAll("SELECT topics.name, students.pic_url, students.first_name, students.last_name, students.email FROM students
 				JOIN topics ON topics.id = students.topics_id");
 			
 			$_SESSION["students_with_interests"] = $student_interest . "<p></p>" . $
 			
-			header("Location: index.php?=" . $user_id);
+			header("Location: index.php?=".$new_student_id);
 			exit;
 		}
 	}

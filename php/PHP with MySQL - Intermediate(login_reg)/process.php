@@ -53,12 +53,15 @@
 			
 			$add_users_query = "INSERT INTO users (email, first_name, last_name, password, created_at) 
 					VALUES ('" . $post["email"] . "', '" . $post["first_name"] . "', '" . $post["last_name"] . "', '" . $hash . "', NOW())";
-			mysql_query($add_users_query);
-			$user_id = mysql_insert_id($connection);
-			$_SESSION["user_id"] = $user_id;
+			$add_user = mysql_query($add_users_query);
 			
-			header("Location: profile.php?id=".$user_id);
-			exit;
+			if($add_user == TRUE)
+			{
+				$user_id = mysql_insert_id($connection);
+				
+				header("Location: profile.php?id=".$user_id);
+				exit;
+			}
 		}
 	}
 	
