@@ -3,8 +3,15 @@
 	{
 		var $names = array();
 		
+		function __construct($array)
+		{
+			$this->names = $array;
+			$this->names = $array;
+			$this->names = $array;
+			var_dump($this->names);
+		}
 		
-		function print_table($names)
+		function print_table()
 		{
 			foreach($this->names as $keys => $value)
 			{

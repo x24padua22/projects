@@ -12,15 +12,16 @@
 	<div id="wrapper">
 		<form action="process.php" method="post" id="country_information">
 			<input type="hidden" name="action" value="select_country" />
+			<label for="country">Select Country: </label>
 			<select name="country" id="country">
 <?php
 				if(isset($_SESSION["start"]))
 				{
-					foreach($_SESSION["country"] as $country["name"])
+					foreach($_SESSION["country"] as $country["id"])
 					{
 ?>
-						<option value="<?= $country["name"] ?>">
-							<?= $country["name"] ?>
+						<option value="<?= $country["id"] ?>">
+							<?= $country["id"] ?>
 						</option>
 <?php				}
 				}

@@ -21,8 +21,10 @@
 					$_SESSION["start"] = TRUE;
 					foreach($country_names as $key)
 					{
-						$country["id"] = $key["id"];
-						$country["country_name"] = $key["name"];
+						$_SESSION["id"] = $key["id"];
+						$_SESSION["country_name"] = $key["name"];
+						//echo $country["id"] . " ";
+						//echo $country["country_name"] . "<br />";
 					}
 				}
 			}
@@ -51,6 +53,6 @@
 	$country = new Process();
 	$country->show_countries();
 	
-	//header("Location: index.php");
-	//exit;
+	header("Location: index.php");
+	exit;
 ?>
