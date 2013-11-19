@@ -7,51 +7,51 @@
 		var $connection;
 		var $country_names;
 		
-		function show_countries()
+		function __construct()
 		{
 			$this->connection = new Database();
 			
-			if(isset($_POST["action"]) AND $_POST["action"] == "select_country")
+			$get_countries_query = "SELECT code,name FROM country";
+			$country_names = $this->connection->fetch_all($get_countries_query);
+			$_SESSION["start"] = TRUE;
+			
+			foreach($country_names as $country)
 			{
-				$get_countries_query = "SELECT id, name FROM countries";
-				$country_names = $this->connection->fetch_all($get_countries_query);
-				
-				if(count($country_names) > 0)
-				{
-					$_SESSION["start"] = TRUE;
-					foreach($country_names as $key)
-					{
-						$_SESSION["id"] = $key["id"];
-						$_SESSION["country_name"] = $key["name"];
-						//echo $country["id"] . " ";
-						//echo $country["country_name"] . "<br />";
-					}
-				}
+				$name[] = $country["name"];
+				$code[] = $country["code"];
 			}
+			
+			$_SESSION["country_name"] = $name;
+			$_SESSION["country_code"] = $code;
 		}
 		
 		function get_country_info()
 		{
-			$get_country_info_query = "SELECT name, continent, region, population, life_expectancy, government_form 
-									   FROM countries
-									   id=$country_id";
-			$country = $this->connection->fetch_record($get_country_info_query);
+			$this->connection = new Database();
 			
-			if($country == TRUE)
+			if(isset($_POST["action"]) AND $_POST["action"] == "select_country" AND !empty($_POST["country"]))
 			{
-				$_SESSION["picked_country"] == TRUE;
-				$_SESSION["name"] = $country["name"];
-				$_SESSION["continent"] = $country["continent"];
-				$_SESSION["region"] = $country["region"];
-				$_SESSION["population"] = $country["population"];
-				$_SESSION["life_expectancy"] = $country["life_expectancy"];
-				$_SESSION["government_form"] = $country["government_form"];
+				$get_country_info_query = "SELECT Name, Continent, Region, Population, LifeExpectancy, GovernmentForm 
+										   FROM country
+										   WHERE Code='" . $_POST["country"] . "'";
+				$country_info = $this->connection->fetch_record($get_country_info_query);
+				
+				if($country_info == TRUE)
+				{
+					$_SESSION["pick"] = TRUE;
+					$_SESSION["name"] = $country_info["Name"];
+					$_SESSION["continent"] = $country_info["Continent"];
+					$_SESSION["region"] = $country_info["Region"];
+					$_SESSION["population"] = $country_info["Population"];
+					$_SESSION["life_expectancy"] = $country_info["LifeExpectancy"];
+					$_SESSION["government_form"] = $country_info["GovernmentForm"];
+				}
 			}
 		}
 	}
 	
 	$country = new Process();
-	$country->show_countries();
+	$country->get_country_info();
 	
 	header("Location: index.php");
 	exit;

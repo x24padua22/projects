@@ -17,11 +17,11 @@
 <?php
 				if(isset($_SESSION["start"]))
 				{
-					foreach($_SESSION["country"] as $country["id"])
+					foreach($_SESSION["country_name"] as $key => $value)
 					{
 ?>
-						<option value="<?= $country["id"] ?>">
-							<?= $country["id"] ?>
+						<option value="<?= array_shift($_SESSION["country_code"]) ?>">
+							<?= $value ?>
 						</option>
 <?php				}
 				}
@@ -30,7 +30,7 @@
 			<input type="submit" value="Check Info" />
 		</form>
 <?php
-		if(isset($_SESSION["picked_country"]))
+		if(isset($_SESSION["pick"]))
 		{
 ?>
 			<div>
@@ -46,3 +46,6 @@
 	</div>
 </body>
 </html>
+<?php
+	$_SESSION = array();
+?>
