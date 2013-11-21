@@ -29,15 +29,21 @@
 			<form id="edit_profile_form" action="../users/process_edit_profile" method="post" class="pull-left">
 				<div class="form-group">
 					<label for="first_name">First Name:</label>
-					<input type="text" name="first_name" class="form-control" />
+					<input type="text" name="first_name" class="form-control" placeholder="<?= $user_info["first_name"] ?>">
+						<?= $new_user_info["first_name"] ?>
+					</input>
 				</div>
 				<div class="form-group">
 					<label for="last_name">Last Name:</label>
-					<input type="text" name="last_name" class="form-control" />
+					<input type="text" name="last_name" class="form-control" placeholder="<?= $user_info["last_name"] ?>">
+						<?= $new_user_info["last_name"] ?>
+					</input>
 				</div>
 				<div class="form-group">
 					<label for="email">Email:</label>
-					<input type="text" name="email" class="form-control" />
+					<input type="text" name="email" class="form-control" placeholder="<?= $user_info["email"] ?>">
+						<?= $new_user_info["email"] ?>
+					</input>
 				</div>
 				<input type="submit" value="Register" class="btn btn-success" />
 			</form>

@@ -25,8 +25,8 @@
 				$email = $row->email;
 				$description =  $row->description;
 				$created_at =  $row->created_at;
-				$data["user_data"] = array($first_name, $last_name, $email, $created_at);
-				return $data["user_data"];
+				$data["user_data"] = array($id, $first_name, $last_name, $email, $description, $created_at);
+				return $data;
 			}
 			else
 			{
@@ -37,7 +37,22 @@
 		public function insert_user($user_info)
 		{
 			$this->user_info = $user_info;
-			return $this->db->insert("users", $user_info);
+			$this->db->insert("users", $user_info);
+			return $data["user_info"] = array($data["first_name"], $data["last_name"], $data["email"]);
+		}
+		
+		public function edit_user($user_info)
+		{
+			$user = $this->db->where("email", $user_info["previous_email"]);
+					$this->db->update("users", $user_info);
+			if($user->num_rows() > 0)
+			{
+				$data["first_name"] = $row->first_name;
+				$data["last_name"] = $row->last_name;
+				$data["email"] = $row->email;
+			}
+			$data["user_data"] = array($data["first_name"], $data["last_name"], $data["email"]);
+			return $data;
 		}
 		
 		public function get_all_users()
@@ -51,7 +66,7 @@
 				$data["created_at"] =  $row->created_at;
 			}
 			$data["user_data"] = array($data["first_name"], $data["last_name"], $data["email"], $data["created_at"]);
-			return $data["user_data"];
+			return $data;
 		}
 	
 	}

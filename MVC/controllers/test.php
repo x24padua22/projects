@@ -76,11 +76,11 @@ class Test extends CI_Controller {
 							   "created_at" => date('Y-m-d H:i:s')
 							   );
 							   
-			$this->test_model->insert_user($user_info);
+			$data["user_info"] = $this->test_model->insert_user($user_info);
 			
 			$this->load->library('session');
 			$this->session->set_userdata("user_session", $user_info);
-			redirect(base_url("users/edit"));
+			redirect(base_url("users/edit", $data));
 		}
 	}
 }

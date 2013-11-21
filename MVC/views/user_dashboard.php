@@ -25,18 +25,22 @@
 		</div>
 		<div id="main_contents">
 			<h3>All Users</h3>
-			<table>
+			<table class="table table-bordered">
 				<thead>
 					<tr>
-						<th>Name</th>
+						<th>First Name</th>
+						<th>Last Name</th>
 						<th>Email</th>
 						<th>Created At</th>
-						<th>Name</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td><?= $user_data["first_name"] ?></td>
+<?php					foreach($user_data as $key => $value)
+						{
+?>
+							<td><?= $value ?></td>
+<?php					}	?>					
 					</tr>
 				</tbody>
 			</table>
