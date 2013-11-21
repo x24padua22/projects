@@ -1,0 +1,24 @@
+.navbar{
+	padding: 0px 150px;
+}
+
+#main_contents{
+	width: 1000px;
+	margin: 100px auto;
+}
+
+form{
+	width: 500px;
+}
+
+.form-control{
+	width: 250px;
+}
+
+h4{
+	padding: 20px 0px 10px 0px;
+}
+
+textarea{
+	margin-bottom: 10px;
+}
