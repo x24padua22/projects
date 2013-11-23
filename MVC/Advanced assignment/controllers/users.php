@@ -3,6 +3,9 @@
 require_once("test.php");
 
 class Users extends Test {
+	
+	public $view_data = array();
+	
 	public function __construct()
 	{
 		parent:: __construct();
@@ -15,9 +18,18 @@ class Users extends Test {
 		$this->load->view("user_dashboard", $data);
 	}
 	
-	public function show()
+	public function show($login_data)
 	{
-		$this->load->view("user_info");
+		$this->view_data["user_data"] = array(
+			"first_name" => $login_data->first_name,
+			"last_name" => $login_data->last_name,
+			"created_at" => $login_data->created_at,
+			"id" => $login_data->id,
+			"email" => $login_data->email,
+			"description" => $login_data->description
+		);
+		
+		$this->load->view("user_info", $this->view_data);
 	}
 	
 	public function edit()
@@ -42,11 +54,12 @@ class Users extends Test {
 		else
 		{
 			$user = $this->input->post();
-			$user_info = array("previous_email" => $email,
-							   "first_name" => $user["first_name"],
-							   "last_name" => $user["last_name"],
-							   "email" => $user["email"]
-							   );
+			$user_info = array(
+				"previous_email" => $email,
+				"first_name" => $user["first_name"],
+				"last_name" => $user["last_name"],
+				"email" => $user["email"]
+			);
 							   
 			$this->load->model("test_model");
 			$data["new_user_info"] = $this->test_model->edit_user($user_info);

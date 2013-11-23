@@ -24,12 +24,12 @@
 			</div>
 		</div>
 		<div id="main_contents">
-			<h3><?= $login_data["first_name"] . " " . $login_data["last_name"] ?></h3>
+			<h3><?= $user_data["first_name"] . " " . $user_data["last_name"] ?></h3>
 			<ul class="list-unstyled">
-				<li>Registered at: <?= $login_data[created_at] ?></li>
-				<li>User ID: #<?= $login_data[id] ?></li>
-				<li>Email Address: <?= $login_data[email] ?></li>
-				<li>Desciption: <?= $login_data[description] ?></li>
+				<li>Registered at: <?= $user_data["created_at"] ?></li>
+				<li>User ID: #<?= $user_data["id"] ?></li>
+				<li>Email Address: <?= $user_data["email"] ?></li>
+				<li>Desciption: <?= $user_data["description"] ?></li>
 			</ul>
 		</div>
 	</div>
