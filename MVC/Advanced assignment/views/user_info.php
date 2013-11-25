@@ -16,7 +16,7 @@
 				<li><a href="/users/dashboard">Dashboard</a></li>
 			</ul>
 			<ul class="nav navbar-nav">
-				<li><a href="../users/edit">Profile</a></li>
+				<li><a href="/users/edit/<?= $user_data['id']?>">Profile</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="../test">Log Off</a></li>
@@ -31,6 +31,16 @@
 				<li>Email Address: <?= $user_data["email"] ?></li>
 				<li>Desciption: <?= $user_data["description"] ?></li>
 			</ul>
+			<div>
+				<form action="../show/<?= $user_data['id']?>" id="messages_form" method="post">
+					<label for="message">Leave a message for <?= $user_data["first_name"] ?></label>
+					<textarea name="message" cols="150" rows="5"></textarea>
+					<input type="submit" value="Post" class="btn btn-success" />
+				</form>
+			</div>
+			<div>
+				<p><?= $view_data["message"] ?></p>
+			</div>
 		</div>
 	</div>
 </body>

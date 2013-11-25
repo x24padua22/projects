@@ -41,9 +41,14 @@ class Test extends CI_Controller {
 				"email" => $user["email"],
 				"password" => $user["password"]
 			);
-							   
+
 			$this->load->model("test_model");				   
-			$this->test_model->get_user($user_info);
+			$get_user = $this->test_model->get_user($user_info, NULL);
+			
+			if($get_user)
+			{
+				redirect(base_url("/users/show/" . $get_user->id));
+			}
 		}
 	}
 	
@@ -74,7 +79,12 @@ class Test extends CI_Controller {
 			);
 			
 			$this->load->model("test_model");
-			$this->test_model->insert_user($user_info);
+			$user_register = $this->test_model->insert_user($user_info);
+			
+			if($user_register)
+			{
+				redirect(base_url("/users/edit/" . $user_register->id));
+			}
 		}
 	}
 }

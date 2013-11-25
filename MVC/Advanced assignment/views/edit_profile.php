@@ -16,54 +16,51 @@
 				<li><a href="/users/dashboard">Dashboard</a></li>
 			</ul>
 			<ul class="nav navbar-nav">
-				<li><a href="../users/edit">Profile</a></li>
+				<li><a href="/users/edit/<?= $user_data['id']?>">Profile</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="../test">Log Off</a></li>
+				<li><a href="/test">Log Off</a></li>
 			</ul>
 			</div>
 		</div>
 		<div id="main_contents">
 			<h3>Edit Profile</h3>
 			<h4>Edit Information</h4>
-			<form id="edit_profile_form" action="../users/process_edit_profile" method="post" class="pull-left">
+			<form id="edit_profile_form" action="/users/process_edit_profile/<?= $user_data['id'] ?>" method="post" class="pull-left">
 				<div class="form-group">
 					<label for="first_name">First Name:</label>
-					<input type="text" name="first_name" class="form-control" placeholder="<?= $user_info["first_name"] ?>">
-						<?= $new_user_info["first_name"] ?>
+					<input type="text" name="first_name" class="form-control" value="<?= $user_data["first_name"] ?>">
 					</input>
 				</div>
 				<div class="form-group">
 					<label for="last_name">Last Name:</label>
-					<input type="text" name="last_name" class="form-control" placeholder="<?= $user_info["last_name"] ?>">
-						<?= $new_user_info["last_name"] ?>
+					<input type="text" name="last_name" class="form-control" value="<?= $user_data["last_name"] ?>">
 					</input>
 				</div>
 				<div class="form-group">
 					<label for="email">Email:</label>
-					<input type="text" name="email" class="form-control" placeholder="<?= $user_info["email"] ?>">
-						<?= $new_user_info["email"] ?>
+					<input type="text" name="email" class="form-control" value="<?= $user_data["email"] ?>">
 					</input>
 				</div>
-				<input type="submit" value="Register" class="btn btn-success" />
+				<input type="submit" value="Save" class="btn btn-success" />
 			</form>
 			<h4>Change Password</h4>
-			<form id="change_password_form" action="../users/process_change_password" method="post" class="pull-right">
+			<form id="change_password_form" action="/users/process_change_password/<?= $user_data['id'] ?>" method="post" class="pull-right">
 				<div class="form-group">
 					<label for="password">Password:</label>
 					<input type="password" name="password" class="form-control" />
 				</div>
 				<div class="form-group">
-					<label for="confirm_password">Confirm Password:</label>
+					<label for="confirm_password">Password Confirmation:</label>
 					<input type="password" name="confirm_password" class="form-control" />
 				</div>
 				<input type="submit" value="Update Password" class="btn btn-success" />
 			</form>
 			<div class="clearfix"></div>
 			<h4>Edit Description</h4>
-			<form id="edit_description_form" action="../users/process_edit_description" method="post">
-				<textarea name="desciption" cols="150" rows="5"></textarea>
-				<input type="submit" value="Update Password" class="btn btn-success" />
+			<form id="edit_description_form" action="/users/process_edit_description/<?= $user_data['id'] ?>" method="post">
+				<textarea name="description" cols="150" rows="5"><?= $user_data["description"] ?></textarea>
+				<input type="submit" value="Save" class="btn btn-success" />
 			</form>
 		</div>
 	</div>

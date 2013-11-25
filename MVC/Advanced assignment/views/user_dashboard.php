@@ -16,31 +16,38 @@
 				<li><a href="/users/dashboard">Dashboard</a></li>
 			</ul>
 			<ul class="nav navbar-nav">
-				<li><a href="../users/edit">Profile</a></li>
+				<li><a href="/users/edit">Profile</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="../test">Log Off</a></li>
+				<li><a href="/test">Log Off</a></li>
 			</ul>
-			</div>
 		</div>
 		<div id="main_contents">
 			<h3>All Users</h3>
 			<table class="table table-bordered">
 				<thead>
 					<tr>
-						<th>First Name</th>
-						<th>Last Name</th>
+						<th>Name</th>
 						<th>Email</th>
 						<th>Created At</th>
+						<th>User Level</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-<?php					foreach($user_data as $key => $value)
+<?php					while($row = $user_data)
 						{
+							foreach($columns as $name => $value)
+							{
 ?>
-							<td><?= $value ?></td>
-<?php					}	?>					
+								<tr>
+									<td><?= $value["name"] ?></td>
+									<td><?= $value["email"] ?></td>
+									<td><?= $value["created_at"] ?></td>
+									<td><?= $value["user_level"] ?></td>
+								</tr>
+<?php						}
+						}	?>
 					</tr>
 				</tbody>
 			</table>
