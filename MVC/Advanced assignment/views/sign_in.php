@@ -21,6 +21,11 @@
 		</div>
 		<div id="main_contents">
 			<h3>Signin</h3>
+<?php 		if(isset($login_errors))
+			{
+				echo $login_errors;
+			}	
+?>
 			<form id="signin_form" action="/test/process_signin" method="post">
 				<div class="form-group">
 					<label for="email">Email:</label>

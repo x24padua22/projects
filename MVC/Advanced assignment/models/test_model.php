@@ -37,26 +37,39 @@
 			$this->db->update("users", $user_info);
 			
 			return $this->db->where("id", $user_info["id"])
-									  ->get("users")
-									  ->row();
+							->get("users")
+							->row();
 		}
 		
 		public function get_all_users()
 		{
-			$all_users = $this->db->get("users");
+			$all_users = $this->db->select("users.id, 
+											users.first_name, 
+											users.last_name, 
+											users.email, 
+											users.created_at, 
+											user_levels.user_level
+											")
+								  ->join("user_levels", "users.user_level_id = user_levels.id")
+								  ->order_by("users.id", "asc")
+								  ->get("users");
 			
-			foreach($all_users->result() as $row)
-			{
-				$data["name"] = $row->first_name . " " . $row->last_name;
-				$data["email"] = $row->email;
-				$data["created_at"] =  $row->created_at;
-			}
-			
-			$data["user_data"] = array($data["name"], $data["email"], $data["created_at"]);
-			return $data;
+			return $all_users;
 		}
 		
-		
+		public function get_messages($user_id)
+		{
+			$posted_messages = $this->db->select("messages.message,
+												  messages.created_at,
+												  users.first_name,
+												  users.last_name,
+												  ")
+										->where("user_id", $user_id)
+										->join("users", "messages.user_id = users.id")
+										->get("messages");
+
+			return $posted_messages;
+		}
 	}
 
 //end of file

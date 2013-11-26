@@ -16,7 +16,7 @@
 				<li><a href="/users/dashboard">Dashboard</a></li>
 			</ul>
 			<ul class="nav navbar-nav">
-				<li><a href="/users/edit/<?= $user_data['id']?>">Profile</a></li>
+				<li><a href="/users/edit">Profile</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="/test">Log Off</a></li>
@@ -26,7 +26,16 @@
 		<div id="main_contents">
 			<h3>Edit Profile</h3>
 			<h4>Edit Information</h4>
-			<form id="edit_profile_form" action="/users/process_edit_profile/<?= $user_data['id'] ?>" method="post" class="pull-left">
+<?php		if(isset($info_errors))
+			{
+				echo "<p class='text-danger'>" . $info_errors . "</p>";
+			}
+			if(isset($info_success))
+			{
+				echo "<p class='text-success'>" . $info_success . "</p>";
+			}
+?>
+			<form id="edit_profile_form" action="/users/process_edit_profile" method="post" class="pull-left">
 				<div class="form-group">
 					<label for="first_name">First Name:</label>
 					<input type="text" name="first_name" class="form-control" value="<?= $user_data["first_name"] ?>">
@@ -45,7 +54,16 @@
 				<input type="submit" value="Save" class="btn btn-success" />
 			</form>
 			<h4>Change Password</h4>
-			<form id="change_password_form" action="/users/process_change_password/<?= $user_data['id'] ?>" method="post" class="pull-right">
+<?php		if(isset($password_errors))
+			{
+				echo "<p class='text-danger'>" . $password_errors . "</p>";
+			}
+			if(isset($password_success))
+			{
+				echo "<p class='text-success'>" . $password_success . "</p>";
+			}
+?>
+			<form id="change_password_form" action="/users/process_change_password" method="post" class="pull-right">
 				<div class="form-group">
 					<label for="password">Password:</label>
 					<input type="password" name="password" class="form-control" />
@@ -58,7 +76,12 @@
 			</form>
 			<div class="clearfix"></div>
 			<h4>Edit Description</h4>
-			<form id="edit_description_form" action="/users/process_edit_description/<?= $user_data['id'] ?>" method="post">
+<?php		if(isset($description_success))
+			{
+				echo "<p class='text-success'>" . $description_success . "</p>";
+			}
+?>
+			<form id="edit_description_form" action="/users/process_edit_description" method="post">
 				<textarea name="description" cols="150" rows="5"><?= $user_data["description"] ?></textarea>
 				<input type="submit" value="Save" class="btn btn-success" />
 			</form>

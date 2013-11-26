@@ -21,6 +21,11 @@
 		</div>
 		<div id="main_contents">
 			<h3>Register</h3>
+<?php		if(isset($registration_errors))
+			{
+				echo $registration_errors;
+			}
+?>
 			<form id="registration_form" action="/test/process_registration" method="post">
 				<div class="form-group">
 					<label for="first_name">First Name:</label>

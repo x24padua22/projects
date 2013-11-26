@@ -1,6 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Test extends CI_Controller {
+require_once("main.php");
+class Test extends Main {
 	public function __construct()
 	{
 		parent:: __construct();
@@ -30,24 +31,21 @@ class Test extends CI_Controller {
 		
 		if($this->form_validation->run() === FALSE)
 		{
-			$login_errors = validation_errors();
-			$this->load->view("sign_in");
-			echo "<div style='height:50;'></div>" . $login_errors;
+			$data["login_errors"] = validation_errors();
+			$this->load->view("sign_in", $data);
 		}
 		else
 		{
 			$user = $this->input->post();
-			$user_info = array(
-				"email" => $user["email"],
-				"password" => $user["password"]
-			);
+			$user_info = array("email" => $user["email"], "password" => $user["password"]);
 
 			$this->load->model("test_model");				   
 			$get_user = $this->test_model->get_user($user_info, NULL);
 			
 			if($get_user)
 			{
-				redirect(base_url("/users/show/" . $get_user->id));
+				$this->session->set_userdata("user_session", $get_user);
+				redirect(base_url("/users/dashboard"));
 			}
 		}
 	}
@@ -63,26 +61,26 @@ class Test extends CI_Controller {
 		
 		if($this->form_validation->run() === FALSE)
 		{
-			$registration_errors = validation_errors();
-			$this->load->view("registration");
-			echo "<div style='height:50;'></div>" . $registration_errors;
+			$data["registration_errors"] = validation_errors();
+			$this->load->view("registration", $data);
 		}
 		else
 		{
 			$user = $this->input->post();
-			$user_info = array(
-				"first_name" => $user["first_name"],
-				"last_name" => $user["last_name"],
-				"email" => $user["email"],
-				"password" => $user["password"],
-				"created_at" => date('Y-m-d H:i:s')
-			);
+			$user_info = array("first_name" => $user["first_name"],
+							   "last_name" => $user["last_name"],
+							   "email" => $user["email"],
+							   "password" => $user["password"],
+							   "created_at" => date('Y-m-d H:i:s')
+							   );
 			
 			$this->load->model("test_model");
 			$user_register = $this->test_model->insert_user($user_info);
 			
 			if($user_register)
 			{
+				$this->session->set_userdata("user_session", $user_register);
+				$this->is_login();
 				redirect(base_url("/users/edit/" . $user_register->id));
 			}
 		}

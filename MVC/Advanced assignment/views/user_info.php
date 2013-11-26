@@ -16,10 +16,10 @@
 				<li><a href="/users/dashboard">Dashboard</a></li>
 			</ul>
 			<ul class="nav navbar-nav">
-				<li><a href="/users/edit/<?= $user_data['id']?>">Profile</a></li>
+				<li><a href="/users/edit">Profile</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="../test">Log Off</a></li>
+				<li><a href="/test">Log Off</a></li>
 			</ul>
 			</div>
 		</div>
@@ -38,9 +38,18 @@
 					<input type="submit" value="Post" class="btn btn-success" />
 				</form>
 			</div>
-			<div>
-				<p><?= $view_data["message"] ?></p>
-			</div>
+<?php		if(!empty($messages_info))
+			{
+?>
+				<div>
+<?php			foreach($messages_info as $key => $value)
+				{
+					echo array_shift($key["posted_by"]) . " " . array_shift($key["posted_at"]);
+					echo $key["message"];
+				}
+?>
+				</div>
+<?php		}	?>
 		</div>
 	</div>
 </body>

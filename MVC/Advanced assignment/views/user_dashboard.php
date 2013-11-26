@@ -27,6 +27,7 @@
 			<table class="table table-bordered">
 				<thead>
 					<tr>
+						<th>ID</th>
 						<th>Name</th>
 						<th>Email</th>
 						<th>Created At</th>
@@ -34,21 +35,29 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-<?php					while($row = $user_data)
+<?php					for($i = 0; $i < count($user_data); $i++)
 						{
-							foreach($columns as $name => $value)
-							{
-?>
-								<tr>
-									<td><?= $value["name"] ?></td>
-									<td><?= $value["email"] ?></td>
-									<td><?= $value["created_at"] ?></td>
-									<td><?= $value["user_level"] ?></td>
-								</tr>
-<?php						}
-						}	?>
-					</tr>
+?>						
+							<tr>
+								<td>
+									<?= array_shift($user_data["id"]) ?>
+								</td>
+								<td>
+									<a href="/users/show/<?= array_shift($user_data["id"]) ?>">
+										<?= array_shift($user_data["name"]) ?>
+									</a>
+								</td>
+								<td>
+									<?= array_shift($user_data["email"]) ?>
+								</td>
+								<td>
+									<?= array_shift($user_data["created_at"]) ?>
+								</td>
+								<td>
+									<?= array_shift($user_data["user_level"]) ?>
+								</td>
+							</tr>
+<?php					}	?>
 				</tbody>
 			</table>
 		</div>
