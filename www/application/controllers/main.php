@@ -8,9 +8,10 @@ class Main extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->user_session = $this->session->userdata("user_session");
+		$this->user_session = $this->session->userdata("user_session");		
 	}
 	
+	/*
 	public function is_login()
 	{
 		if($this->user_session == NULL)
@@ -25,6 +26,7 @@ class Main extends CI_Controller {
 			
 		}
 	}
+	*/
 	
 	public function set_user_data($user_info)
 	{

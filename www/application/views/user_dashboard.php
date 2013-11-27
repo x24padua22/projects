@@ -13,13 +13,22 @@
 				<a href="/test" class="navbar-brand">Test App</a>
 			</div>
 			<ul class="nav navbar-nav">
+<?php		if(isset($administrator))
+			{
+?>
+				<li><a href="/users/dashboard/admin">Dashboard</a></li>
+<?php		}
+			else if(isset($non_admin))
+			{
+?>
 				<li><a href="/users/dashboard">Dashboard</a></li>
+<?php		}	?>
 			</ul>
 			<ul class="nav navbar-nav">
 				<li><a href="/users/edit">Profile</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="/test/logout">Log Off</a></li>
+				<li><a href="/users/logout">Log Off</a></li>
 			</ul>
 		</div>
 		<div id="main_contents">
@@ -28,13 +37,19 @@
 ?>
 				<h3 class="col-md-10">Manage Users</h3>
 				<a href="/users/create_new" class="btn btn-primary">Add New</a>
-<?php		}
+<?php				
+				if(isset($delete_message))
+				{
+					echo $delete_message;
+				}
+			}
 			else if(isset($non_admin))
 			{
 ?>
 				<h3>All Users</h3>
 <?php		}	?>
-			<table class="table table-bordered">
+
+			<table class="table table-bordered table-striped">
 				<thead>
 					<tr>
 						<th>Name</th>
@@ -72,7 +87,7 @@
 ?>
 									<td>
 										<a href="/users/edit/<?= array_shift($user_data['id']) ?>">edit</a>
-										<a href="/users/delete" class="pull-right">remove</a>
+										<a href="/users/dashboard/<?= array_shift($user_data['id'])?>" class="pull-right">remove</a>
 										<div class="clearfix"></div>
 									</td>
 <?php							}	?>

@@ -28,7 +28,7 @@
 				<li><a href="/users/edit">Profile</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="/test/logout">Log Off</a></li>
+				<li><a href="/users/logout">Log Off</a></li>
 			</ul>
 			</div>
 		</div>
@@ -83,8 +83,8 @@
 			{
 				echo "<p class='text-success'>" . $password_success . "</p>";
 			}
-			
-			if($user_data["id"] != $user_session_id)
+?>			
+<?php		if($user_data["id"] != $user_session_id)
 			{
 ?>
 				<form id="change_password_form" action="/users/process_change_password/<?= $user_data['id'] ?>" 

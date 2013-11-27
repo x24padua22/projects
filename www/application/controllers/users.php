@@ -7,17 +7,28 @@ class Users extends Main {
 	public function __construct()
 	{
 		parent:: __construct();
+		
+		if(empty($this->user_session))
+		{
+			redirect(base_url("/test/signin"));
+		}
 	}
 	
-	public function dashboard($user_level_info = NULL)
+	public function dashboard($level_or_delete_info = NULL)
 	{
-		if($user_level_info != NULL)
+		if($level_or_delete_info == "admin")
 		{
 			$view_data["administrator"] = "administrator";
 		}
-		else
+		else if($level_or_delete_info == NULL)
 		{
 			$view_data["non_admin"] = "non_admin";
+		}
+		else
+		{			
+			$this->load->model("test_model");
+			$view_data["delete_message"] = $this->test_model->delete_user($level_or_delete_info);
+			$view_data["administrator"] = "administrator";
 		}
 		
 		$this->load->model("test_model");
@@ -179,14 +190,21 @@ class Users extends Main {
 		echo "Your information was successfully changed!";
 	}
 	
-	public function delete()
-	{
-		echo "delete";
-	}
-	
 	public function create_new()
 	{
-		$this->load->view("registration");
+		$this->load->view("register_new_user");
 	}
 	
+	public function logout()
+	{
+		$user_session_data = $this->session->all_userdata();
+		
+		foreach($user_session_data as $key)
+		{
+			$this->session->unset_userdata($key);
+		}
+		
+		$this->session->sess_destroy();
+		redirect(base_url("/test"));
+	}
 }

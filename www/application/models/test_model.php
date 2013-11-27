@@ -10,16 +10,36 @@
 		{
 			if($user_id != NULL)
 			{
-				return $this->db->where("id", $user_id)
+				$select_user = $this->db->where("id", $user_id)
 								->get("users")
 								->row();
 			}
 			else
 			{
-				return $this->db->where("email", $user_info["email"])
-								->where("password", $user_info["password"])
-								->get("users")
-								->row();
+				$select_user = $this->db->where("email", $user_info["email"])
+										->where("password", $user_info["password"])
+										->get("users")
+										->row();
+			}
+			
+			if($select_user)
+			{
+				return $select_user;
+			}
+			else
+			{
+				$select_user = $this->db->where("email", $user_info["email"])
+										->get("users")
+										->row();
+				
+				if($select_user)
+				{
+					return "wrong pass";
+				}
+				else
+				{
+					return "no email";
+				}
 			}
 		}
 		
@@ -68,6 +88,12 @@
 										->get("messages");
 
 			return $posted_messages;
+		}
+		
+		public function delete_user($user_id)
+		{
+			$this->db->delete("users", array("id" => $user_id));
+			return "User successfully deleted.";
 		}
 	}
 
