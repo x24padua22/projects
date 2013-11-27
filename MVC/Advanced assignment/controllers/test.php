@@ -55,6 +55,11 @@ class Test extends Main {
 					redirect(base_url("/users/dashboard"));
 				}
 			}
+			else
+			{
+				$data["login_errors"] = "Email not found in database or Incorrect password";
+				$this->load->view("sign_in", $data);
+			}
 		}
 	}
 	
@@ -96,8 +101,8 @@ class Test extends Main {
 	
 	public function logout()
 	{
-		$this->user_session = NULL;
-		$this->session = NULL;
+		$this->user_session = array();
+		$this->session = array();
 		$this->load->view("home");
 	}
 }

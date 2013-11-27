@@ -17,9 +17,9 @@
 			else
 			{
 				return $this->db->where("email", $user_info["email"])
-								 //->where("password", $user_info["password"])
-								 ->get("users")
-								 ->row();
+								->where("password", $user_info["password"])
+								->get("users")
+								->row();
 			}
 		}
 		
@@ -50,7 +50,7 @@
 											users.created_at, 
 											user_levels.user_level
 											")
-								  ->join("user_levels", "users.user_level_id = user_levels.id", "right")
+								  ->join("user_levels", "users.user_level_id = user_levels.id")
 								  ->get("users");
 			
 			return $all_users;

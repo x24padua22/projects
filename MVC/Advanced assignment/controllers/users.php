@@ -148,16 +148,14 @@ class Users extends Main {
 		{
 			$user = $this->input->post();
 			$user_info = array("id" => $user_id_info,
-							   "first_name" => $user["first_name"],
-							   "last_name" => $user["last_name"],
-							   "email" => $user["email"]
+							   "password" => $user["password"],
 							   );
 							   
 			$this->load->model("test_model");
 			$new_user_info = $this->test_model->edit_user($user_info);
 			
 			$view_data["user_data"] = parent::set_user_data($new_user_info);
-			
+			$view_data["user_session_id"] = $this->user_session->id;
 			$view_data["password_success"] = "Your password was successfully changed!";
 			$this->load->view("edit_profile", $view_data);
 			echo "Your information was successfully changed!";
@@ -175,7 +173,7 @@ class Users extends Main {
 		$new_user_info = $this->test_model->edit_user($user_info);
 		
 		$view_data["user_data"] = parent::set_user_data($new_user_info);
-		
+		$view_data["user_session_id"] = $this->user_session->id;
 		$view_data["description_success"] = "Your profile description was successfully changed!";
 		$this->load->view("edit_profile", $view_data);
 		echo "Your information was successfully changed!";
@@ -184,6 +182,11 @@ class Users extends Main {
 	public function delete()
 	{
 		echo "delete";
+	}
+	
+	public function create_new()
+	{
+		$this->load->view("registration");
 	}
 	
 }

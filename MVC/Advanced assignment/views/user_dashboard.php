@@ -27,7 +27,7 @@
 			{
 ?>
 				<h3 class="col-md-10">Manage Users</h3>
-				<a href="" class="btn btn-primary">Add New</a>
+				<a href="/users/create_new" class="btn btn-primary">Add New</a>
 <?php		}
 			else if(isset($non_admin))
 			{
@@ -37,7 +37,6 @@
 			<table class="table table-bordered">
 				<thead>
 					<tr>
-						<th>ID</th>
 						<th>Name</th>
 						<th>Email</th>
 						<th>Created At</th>
@@ -54,9 +53,6 @@
 						{
 ?>						
 							<tr>
-								<td>
-									<?= array_shift($user_data["id"]) ?>
-								</td>
 								<td>
 									<a href="/users/show/<?= array_shift($user_data['id']) ?>">
 										<?= array_shift($user_data["name"]) ?>

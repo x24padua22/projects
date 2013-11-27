@@ -13,11 +13,16 @@ class Main extends CI_Controller {
 	
 	public function is_login()
 	{
-	//search how to use is_login also to logout and destroy session
-		if($is_login)
+		if($this->user_session == NULL)
+		{
+			$is_login = TRUE;
+			echo "yes";
+		}
+		else
 		{
 			echo "You don't have permission to access this page. Please sign in <a href='/test/signin'>here</a>.";
 			echo " Or go back to <a href='/test'>Home page</a>.";
+			
 		}
 	}
 	
