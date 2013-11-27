@@ -50,8 +50,7 @@
 											users.created_at, 
 											user_levels.user_level
 											")
-								  ->join("user_levels", "users.user_level_id = user_levels.id")
-								  ->order_by("users.id", "asc")
+								  ->join("user_levels", "users.user_level_id = user_levels.id", "right")
 								  ->get("users");
 			
 			return $all_users;

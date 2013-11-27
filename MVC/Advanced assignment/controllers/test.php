@@ -44,8 +44,16 @@ class Test extends Main {
 			
 			if($get_user)
 			{
-				$this->session->set_userdata("user_session", $get_user);
-				redirect(base_url("/users/dashboard"));
+				if($get_user->user_level_id == 1)
+				{
+					$this->session->set_userdata("user_session", $get_user);
+					redirect(base_url("/users/dashboard/admin"));
+				}
+				else
+				{
+					$this->session->set_userdata("user_session", $get_user);
+					redirect(base_url("/users/dashboard"));
+				}
 			}
 		}
 	}
@@ -84,5 +92,12 @@ class Test extends Main {
 				redirect(base_url("/users/edit/" . $user_register->id));
 			}
 		}
+	}
+	
+	public function logout()
+	{
+		$this->user_session = NULL;
+		$this->session = NULL;
+		$this->load->view("home");
 	}
 }

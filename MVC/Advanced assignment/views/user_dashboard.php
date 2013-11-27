@@ -19,11 +19,21 @@
 				<li><a href="/users/edit">Profile</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="/test">Log Off</a></li>
+				<li><a href="/test/logout">Log Off</a></li>
 			</ul>
 		</div>
 		<div id="main_contents">
-			<h3>All Users</h3>
+<?php		if(isset($administrator))
+			{
+?>
+				<h3 class="col-md-10">Manage Users</h3>
+				<a href="" class="btn btn-primary">Add New</a>
+<?php		}
+			else if(isset($non_admin))
+			{
+?>
+				<h3>All Users</h3>
+<?php		}	?>
 			<table class="table table-bordered">
 				<thead>
 					<tr>
@@ -32,6 +42,11 @@
 						<th>Email</th>
 						<th>Created At</th>
 						<th>User Level</th>
+<?php					if(isset($administrator))
+						{
+?>
+							<th>Actions</th>
+<?php					}	?>
 					</tr>
 				</thead>
 				<tbody>
@@ -43,7 +58,7 @@
 									<?= array_shift($user_data["id"]) ?>
 								</td>
 								<td>
-									<a href="/users/show/<?= array_shift($user_data["id"]) ?>">
+									<a href="/users/show/<?= array_shift($user_data['id']) ?>">
 										<?= array_shift($user_data["name"]) ?>
 									</a>
 								</td>
@@ -56,6 +71,15 @@
 								<td>
 									<?= array_shift($user_data["user_level"]) ?>
 								</td>
+<?php							if(isset($administrator))
+								{
+?>
+									<td>
+										<a href="/users/edit/<?= array_shift($user_data['id']) ?>">edit</a>
+										<a href="/users/delete" class="pull-right">remove</a>
+										<div class="clearfix"></div>
+									</td>
+<?php							}	?>
 							</tr>
 <?php					}	?>
 				</tbody>

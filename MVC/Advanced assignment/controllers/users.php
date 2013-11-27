@@ -3,16 +3,23 @@
 require_once("main.php");
 
 class Users extends Main {
-	
-	public $view_data = array();
 		
 	public function __construct()
 	{
 		parent:: __construct();
 	}
 	
-	public function dashboard()
+	public function dashboard($user_level_info = NULL)
 	{
+		if($user_level_info != NULL)
+		{
+			$view_data["administrator"] = "administrator";
+		}
+		else
+		{
+			$view_data["non_admin"] = "non_admin";
+		}
+		
 		$this->load->model("test_model");
 		$user_info = $this->test_model->get_all_users();
 		
@@ -42,14 +49,7 @@ class Users extends Main {
 		$user_info = $this->test_model->get_user(NULL, $user_id);
 		$messages = $this->test_model->get_messages($user_id);
 		
-		$view_data["user_data"] = array("id" => $user_info->id,
-										"first_name" => $user_info->first_name,
-										"last_name" => $user_info->last_name,
-										"created_at" => $user_info->created_at,
-										"id" => $user_info->id,
-										"email" => $user_info->email,
-										"description" => $user_info->description
-										);
+		$view_data["user_data"] = parent::set_user_data($user_info);
 		
 		foreach($messages->result() as $key)
 		{
@@ -66,23 +66,29 @@ class Users extends Main {
 		$this->load->view("user_info", $view_data);
 	}
 	
-	public function edit()
+	public function edit($user_id = NULL)
 	{
 		$this->load->model("test_model");
-		$user_info = $this->test_model->get_user(NULL, $this->user_session->id);
 		
-		$view_data["user_data"] = array("id" => $user_info->id,
-										"first_name" => $user_info->first_name,
-										"last_name" => $user_info->last_name,
-										"email" => $user_info->email,
-										"description" => $user_info->description
-										);
+		if($user_id == NULL)
+		{
+			$user_info = $this->test_model->get_user(NULL, $this->user_session->id);
+		}
+		else
+		{
+			$user_info = $this->test_model->get_user(NULL, $user_id);
+		}
 		
+		$view_data["user_data"] = parent::set_user_data($user_info);
+		
+		$view_data["user_session_id"] = $this->user_session->id;
 		$this->load->view("edit_profile", $view_data);
 	}
 	
-	public function process_edit_profile($user_id)
+	public function process_edit_profile($user_id = NULL)
 	{
+		$user_id_info = parent::check_user_id($user_id);
+			
 		$this->load->library("form_validation");
 		$this->form_validation->set_rules("first_name", "First Name", "trim|required");
 		$this->form_validation->set_rules("last_name", "Last Name", "trim|required");
@@ -91,22 +97,18 @@ class Users extends Main {
 		if($this->form_validation->run() === FALSE)
 		{
 			$this->load->model("test_model");
-			$user_info = $this->test_model->get_user(NULL, $user_id);
+			$user_info = $this->test_model->get_user(NULL, $user_id_info);
 			
-			$view_data["user_data"] = array("id" => $user_info->id,
-											"first_name" => $user_info->first_name,
-											"last_name" => $user_info->last_name,
-											"email" => $user_info->email,
-											"description" => $user_info->description
-											);
+			$view_data["user_data"] = parent::set_user_data($user_info);
 			
+			$view_data["user_session_id"] = $this->user_session->id;
 			$view_data["info_errors"] = validation_errors();
 			$this->load->view("edit_profile", $view_data);
 		}
 		else
 		{
 			$user = $this->input->post();
-			$user_info = array("id" => $user_id,
+			$user_info = array("id" => $user_id_info,
 							   "first_name" => $user["first_name"],
 							   "last_name" => $user["last_name"],
 							   "email" => $user["email"]
@@ -115,12 +117,7 @@ class Users extends Main {
 			$this->load->model("test_model");
 			$new_user_info = $this->test_model->edit_user($user_info);
 			
-			$view_data["user_data"] = array("id" => $new_user_info->id,
-											"first_name" => $new_user_info->first_name,
-											"last_name" => $new_user_info->last_name,
-											"email" => $new_user_info->email,
-											"description" => $new_user_info->description
-											);
+			$view_data["user_data"] = parent::set_user_data($new_user_info);
 			
 			$view_data["info_success"] = "Your information was successfully changed!";
 			$this->load->view("edit_profile", $view_data);
@@ -128,8 +125,10 @@ class Users extends Main {
 		}
 	}
 	
-	public function process_change_password($user_id)
+	public function process_change_password($user_id = NULL)
 	{
+		$user_id_info = parent::check_user_id($user_id);
+		
 		$this->load->library("form_validation");
 		$this->form_validation->set_rules("password", "Password", "trim|min_length[8]|required|matches[confirm_password]|md5");
 		$this->form_validation->set_rules("confirm_password", "Confirm Password", "trim|required|md5");
@@ -137,22 +136,18 @@ class Users extends Main {
 		if($this->form_validation->run() === FALSE)
 		{
 			$this->load->model("test_model");
-			$user_info = $this->test_model->get_user(NULL, $user_id);
+			$user_info = $this->test_model->get_user(NULL, $user_id_info);
 			
-			$view_data["user_data"] = array("id" => $user_info->id,
-											"first_name" => $user_info->first_name,
-											"last_name" => $user_info->last_name,
-											"email" => $user_info->email,
-											"description" => $user_info->description
-											);
+			$view_data["user_data"] = parent::set_user_data($user_info);
 			
+			$view_data["user_session_id"] = $this->user_session->id;
 			$view_data["password_errors"] = validation_errors();
 			$this->load->view("edit_profile", $view_data);
 		}
 		else
 		{
 			$user = $this->input->post();
-			$user_info = array("id" => $user_id,
+			$user_info = array("id" => $user_id_info,
 							   "first_name" => $user["first_name"],
 							   "last_name" => $user["last_name"],
 							   "email" => $user["email"]
@@ -161,12 +156,7 @@ class Users extends Main {
 			$this->load->model("test_model");
 			$new_user_info = $this->test_model->edit_user($user_info);
 			
-			$view_data["user_data"] = array("id" => $new_user_info->id,
-											"first_name" => $new_user_info->first_name,
-											"last_name" => $new_user_info->last_name,
-											"email" => $new_user_info->email,
-											"description" => $new_user_info->description
-											);
+			$view_data["user_data"] = parent::set_user_data($new_user_info);
 			
 			$view_data["password_success"] = "Your password was successfully changed!";
 			$this->load->view("edit_profile", $view_data);
@@ -174,23 +164,26 @@ class Users extends Main {
 		}
 	}
 	
-	public function process_edit_description($user_id)
+	public function process_edit_description($user_id = NULL)
 	{
+		$user_id_info = parent::check_user_id($user_id);
+		
 		$user = $this->input->post();
-		$user_info = array("id" => $user_id, "description" => $user["description"]);
+		$user_info = array("id" => $user_id_info, "description" => $user["description"]);
 						   
 		$this->load->model("test_model");
 		$new_user_info = $this->test_model->edit_user($user_info);
 		
-		$view_data["user_data"] = array("id" => $new_user_info->id,
-										"first_name" => $new_user_info->first_name,
-										"last_name" => $new_user_info->last_name,
-										"email" => $new_user_info->email,
-										"description" => $new_user_info->description
-										);
+		$view_data["user_data"] = parent::set_user_data($new_user_info);
 		
 		$view_data["description_success"] = "Your profile description was successfully changed!";
 		$this->load->view("edit_profile", $view_data);
 		echo "Your information was successfully changed!";
 	}
+	
+	public function delete()
+	{
+		echo "delete";
+	}
+	
 }
