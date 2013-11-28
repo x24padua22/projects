@@ -13,16 +13,7 @@
 				<a class="navbar-brand">Test App</a>
 			</div>
 			<ul class="nav navbar-nav">
-<?php		if(isset($administrator))
-			{
-?>
 				<li><a href="/users/dashboard/admin">Dashboard</a></li>
-<?php		}
-			else if(isset($non_admin))
-			{
-?>
-				<li><a href="/users/dashboard">Dashboard</a></li>
-<?php		}	?>
 			</ul>
 			<ul class="nav navbar-nav">
 				<li><a href="/users/edit">Profile</a></li>
@@ -44,8 +35,12 @@
 			{
 				echo $create_success;
 			}
+			else if(isset($create_failed))
+			{
+				echo $create_failed;
+			}
 ?>
-			<form id="registration_form" action="/test/process_create_new" method="post">
+			<form id="registration_form" action="/users/process_create_new" method="post">
 				<div class="form-group">
 					<label for="first_name">First Name:</label>
 					<input type="text" name="first_name" class="form-control" />

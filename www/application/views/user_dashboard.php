@@ -2,9 +2,19 @@
 <html lang="en-US">
 <head>
 	<meta charset="UTF-8">
-	<title>Admin Dashboard</title>
+	<title>Dashboard</title>
 	<link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="/assets/css/jquery-ui.css">
 	<link rel="stylesheet" href="/assets/css/test.css">
+	<script src="/assets/jquery/jquery-2.0.3.js"></script>
+	<script src="/assets/jquery/jquery-ui.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#remove_user").click(function(){
+				location.reload();
+			});
+		};
+	</script>
 </head>
 <body>
 	<div id="wrapper">
@@ -13,12 +23,12 @@
 				<a href="/test" class="navbar-brand">Test App</a>
 			</div>
 			<ul class="nav navbar-nav">
-<?php		if(isset($administrator))
+<?php		if($administrator)
 			{
 ?>
 				<li><a href="/users/dashboard/admin">Dashboard</a></li>
 <?php		}
-			else if(isset($non_admin))
+			else
 			{
 ?>
 				<li><a href="/users/dashboard">Dashboard</a></li>
@@ -32,18 +42,19 @@
 			</ul>
 		</div>
 		<div id="main_contents">
-<?php		if(isset($administrator))
+<?php		if($administrator)
 			{
 ?>
 				<h3 class="col-md-10">Manage Users</h3>
 				<a href="/users/create_new" class="btn btn-primary">Add New</a>
+				<div class="clearfix"></div>
 <?php				
-				if(isset($delete_message))
+				if(!empty($delete_success))
 				{
-					echo $delete_message;
+					echo $delete_success;
 				}
 			}
-			else if(isset($non_admin))
+			else
 			{
 ?>
 				<h3>All Users</h3>
@@ -56,7 +67,7 @@
 						<th>Email</th>
 						<th>Created At</th>
 						<th>User Level</th>
-<?php					if(isset($administrator))
+<?php					if($administrator)
 						{
 ?>
 							<th>Actions</th>
@@ -64,12 +75,14 @@
 					</tr>
 				</thead>
 				<tbody>
-<?php					for($i = 0; $i < count($user_data); $i++)
+<?php					for($i = 0; $i < $row_counter; $i++)
 						{
+							$id[] = array_shift($user_data['id']);
+							$created_at = array_shift($user_data["created_at"])
 ?>						
 							<tr>
 								<td>
-									<a href="/users/show/<?= array_shift($user_data['id']) ?>">
+									<a href="/users/show/<?= $id[$i] ?>">
 										<?= array_shift($user_data["name"]) ?>
 									</a>
 								</td>
@@ -77,17 +90,18 @@
 									<?= array_shift($user_data["email"]) ?>
 								</td>
 								<td>
-									<?= array_shift($user_data["created_at"]) ?>
+									<?= $created_at ?>
 								</td>
 								<td>
 									<?= array_shift($user_data["user_level"]) ?>
 								</td>
-<?php							if(isset($administrator))
+<?php							if($administrator)
 								{
 ?>
 									<td>
-										<a href="/users/edit/<?= array_shift($user_data['id']) ?>">edit</a>
-										<a href="/users/dashboard/<?= array_shift($user_data['id'])?>" class="pull-right">remove</a>
+										<form action=""></form>
+										<a href="/users/edit/<?= $id[$i] ?>">edit</a>
+										<a href="/users/dashboard/<?= $id[$i] ?>" id="remove_user" class="pull-right">remove</a>
 										<div class="clearfix"></div>
 									</td>
 <?php							}	?>

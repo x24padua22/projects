@@ -10,19 +10,18 @@ class Test extends Main {
 	public function index()
 	{
 		$this->load->view("home");
-		$dbconnect = $this->load->database();
 	}
 	
 	public function signin()
 	{
-		$this->load->view("sign_in");
+		$this->load->view("sign_in", $this->view_data);
 	}
 	
 	public function register()
 	{
-		$this->load->view("registration");
+		$this->load->view("registration", $this->view_data);
 	}
-	
+
 	public function process_signin()
 	{
 		$this->load->library("form_validation");
@@ -31,39 +30,36 @@ class Test extends Main {
 		
 		if($this->form_validation->run() === FALSE)
 		{
-			$view_data["login_errors"] = validation_errors();
-			$this->load->view("sign_in", $view_data);
+			$this->view_data["login_errors"] = validation_errors();
+			$this->load->view("sign_in", $this->view_data);
 		}
 		else
 		{
-			$user = $this->input->post();
-			$user_info = array("email" => $user["email"], "password" => $user["password"]);
-
 			$this->load->model("test_model");				   
-			$get_user = $this->test_model->get_user($user_info, NULL);
-			
-			if ($get_user == "wrong pass")
+			$get_user = $this->test_model->get_user($this->input->post(), NULL);
+
+			if (!$get_user)
 			{
-				$data["login_errors"] = "Incorrect password";
-				$this->load->view("sign_in", $data);
+				$this->view_data["login_errors"] = "Invalid email and password";
+				$this->load->view("sign_in", $this->view_data);
 			}
-			else if ($get_user == "no email")
+			else
 			{
-				$data["login_errors"] = "Email not found in database";
-				$this->load->view("sign_in", $data);
-			}
-			else if($get_user && $get_user != "wrong pass" && $get_user != "no email")
-			{
-				if($get_user->user_level_id == 1)
-				{
-					$this->session->set_userdata("user_session", $get_user);
+				$user_info = array(
+					"id" => $get_user->id,
+					"first_name" => $get_user->first_name, 
+					"last_name" => $get_user->last_name, 
+					"email" => $get_user->email, 
+					"user_level_id" => $get_user->user_level_id, 
+					"is_logged_in" => TRUE
+				);
+
+				$this->session->set_userdata("user_session", $user_info);
+
+				if($get_user->user_level_id == ADMIN)
 					redirect(base_url("/users/dashboard/admin"));
-				}
 				else
-				{
-					$this->session->set_userdata("user_session", $get_user);
 					redirect(base_url("/users/dashboard"));
-				}
 			}
 		}
 	}
@@ -85,60 +81,38 @@ class Test extends Main {
 		else
 		{
 			$user = $this->input->post();
-			$user_info = array("first_name" => $user["first_name"],
-							   "last_name" => $user["last_name"],
-							   "email" => $user["email"],
-							   "password" => $user["password"],
-							   "created_at" => date('Y-m-d H:i:s'),
-							   "user_level_id" => 2
-							   );
+			$user_input = array("first_name" => $user["first_name"],
+				"last_name" => $user["last_name"],
+				"email" => $user["email"],
+				"password" => $user["password"],
+				"created_at" => date('Y-m-d H:i:s'),
+				"user_level_id" => USER
+			);
 			
 			$this->load->model("test_model");
-			$user_register = $this->test_model->insert_user($user_info);
+			$user_register = $this->test_model->insert_user($user_input);
+			
+			$this->load->model("test_model");
+			$user_register = $this->test_model->insert_user($user_input);
 			
 			if($user_register)
 			{
-				$this->session->set_userdata("user_session", $user_register);
-				redirect(base_url("/users/edit/" . $user_register->id));
+				$user_info = array(
+					"id" => $user_register->id,
+					"first_name" => $user_register->first_name, 
+					"last_name" => $user_register->last_name, 
+					"email" => $user_register->email, 
+					"user_level_id" => $user_register->user_level_id, 
+					"is_logged_in" => TRUE
+				);
+				
+				$this->session->set_userdata("user_session", $user_info);
+				redirect(base_url("/users/dashboard"));
 			}
-		}
-	}
-	
-	public function process_create_new()
-	{
-		$current_user = $this->user_session;
-		
-		$this->load->library("form_validation");
-		$this->form_validation->set_rules("first_name", "First Name", "trim|required");
-		$this->form_validation->set_rules("last_name", "Last Name", "trim|required");
-		$this->form_validation->set_rules("email", "Email", "trim|valid_email|required");
-		$this->form_validation->set_rules("password", "Password", "trim|min_length[8]|required|matches[confirm_password]|md5");
-		$this->form_validation->set_rules("confirm_password", "Confirm Password", "trim|required|md5");
-		
-		if($this->form_validation->run() === FALSE)
-		{
-			$view_data["registration_errors"] = validation_errors();
-			$this->load->view("register_new_user", $view_data);
-		}
-		else
-		{
-			$user = $this->input->post();
-			$user_info = array("first_name" => $user["first_name"],
-							   "last_name" => $user["last_name"],
-							   "email" => $user["email"],
-							   "password" => $user["password"],
-							   "created_at" => date('Y-m-d H:i:s'),
-							   "user_level_id" => 2
-							   );
-			
-			$this->load->model("test_model");
-			$user_register = $this->test_model->insert_user($user_info);
-			
-			if($user_register)
+			else
 			{
-				$this->session->set_userdata("user_session", $current_user);
-				$view_data["create_success"] = "You have successfully registered a new user";
-				redirect(base_url("/users/create_new", $view_data));
+				$this->view_data["registration_errors"] = "Sorry, but your info has not been registered. Please try again.";
+				$this->load->view("registration", $this->view_data);
 			}
 		}
 	}

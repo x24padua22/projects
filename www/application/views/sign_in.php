@@ -2,7 +2,7 @@
 <html lang="en-US">
 <head>
 	<meta charset="UTF-8">
-	<title>Signin Page</title>
+	<title>Edit Profile</title>
 	<link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="/assets/css/test.css">
 </head>
