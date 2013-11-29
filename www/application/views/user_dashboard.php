@@ -10,14 +10,42 @@
 	<script src="/assets/jquery/jquery-ui.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
+			$("#dialog_delete").dialog({
+				autoOpen: false,
+				resizable: false,
+				height: 200,
+				width: 250,
+				modal: true,
+				buttons: {
+					Yes: function()	{
+						document.location.href = "/users/dashboard/<?= $id[$i] ?>";
+					}
+					Cancel: function() {
+						$(this).dialog("close");
+					}
+				}
+				show: {
+					effect: "highlight",
+					duration: 500
+				},
+				hide: {
+					duration: 500
+				}
+			});
+			
 			$("#remove_user").click(function(){
-				location.reload();
+				$("#dialog_delete").dialog("open");
+				
+				return false;
 			});
 		};
 	</script>
 </head>
 <body>
 	<div id="wrapper">
+		<div id="dialog_delete">
+			<p>Are you sure you want to delete this user?</p>
+		</div>
 		<div class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<div class="navbar-header">
 				<a href="/test" class="navbar-brand">Test App</a>
@@ -101,7 +129,7 @@
 									<td>
 										<form action=""></form>
 										<a href="/users/edit/<?= $id[$i] ?>">edit</a>
-										<a href="/users/dashboard/<?= $id[$i] ?>" id="remove_user" class="pull-right">remove</a>
+										<a id="remove_user" class="pull-right">remove</a>
 										<div class="clearfix"></div>
 									</td>
 <?php							}	?>

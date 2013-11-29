@@ -1,19 +1,10 @@
-<!DOCTYPE HTML>
-<html lang="en-US">
-<head>
-	<meta charset="UTF-8">
-	<title>Edit Profile</title>
-	<link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.css">
-	<link rel="stylesheet" href="/assets/css/test.css">
-</head>
-<body>
-	<div id="wrapper">
+<?php include "application/views/header.php"; ?>
 		<div class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<div class="navbar-header">
 				<a href="/test" class="navbar-brand">Test App</a>
 			</div>
 			<ul class="nav navbar-nav">
-<?php		if($user_data["user_level_id"] == 1)
+<?php		if($user_session["user_level_id"] == 1)
 			{
 ?>
 				<li><a href="/users/dashboard/admin">Dashboard</a></li>
@@ -28,12 +19,21 @@
 				<li><a href="/users/edit">Profile</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="/test/logout">Log Off</a></li>
+				<li><a href="/users/logout">Log Off</a></li>
 			</ul>
 			</div>
 		</div>
 		<div id="main_contents">
-			<h3>Edit Profile</h3>
+<?php		if(isset($edit_other))
+			{
+?>
+				<h3>Edit user #<?= $user_data["id"] ?></h3>
+<?php		}
+			else
+			{
+?>
+				<h3>Edit Profile</h3>
+<?php		}	?>
 			<h4>Edit Information</h4>
 			
 <?php		if(isset($info_errors))
@@ -45,7 +45,7 @@
 				echo "<p class='text-success'>" . $info_success . "</p>";
 			}
 
-			if($user_data["id"] != $user_session_id)
+			if($user_data["id"] != $user_session["id"])
 			{
 ?>
 				<form id="edit_profile_form" action="/users/process_edit_profile/<?= $user_data['id'] ?>" method="post" class="pull-left">
@@ -71,6 +71,15 @@
 					<input type="text" name="email" class="form-control" value="<?= $user_data["email"] ?>">
 					</input>
 				</div>
+<?php			if(isset($edit_other))
+				{
+?>
+					<label for="user_level">User Level:</label>
+					<select name="user_level" id="user_level" class="form-control">
+						<option value="1">Admin</option>
+						<option value="2">Normal</option>
+					</select>
+<?php			}	?>
 				<input type="submit" value="Save" class="btn btn-success" />
 			</form>
 			<h4>Change Password</h4>
@@ -83,8 +92,8 @@
 			{
 				echo "<p class='text-success'>" . $password_success . "</p>";
 			}
-			
-			if($user_data["id"] != $user_session_id)
+?>			
+<?php		if($user_data["id"] != $user_session["id"])
 			{
 ?>
 				<form id="change_password_form" action="/users/process_change_password/<?= $user_data['id'] ?>" 
@@ -107,26 +116,30 @@
 				<input type="submit" value="Update Password" class="btn btn-success" />
 			</form>
 			<div class="clearfix"></div>
-			<h4>Edit Description</h4>
-<?php		if(isset($description_success))
+<?php		if(!isset($edit_other))
 			{
-				echo "<p class='text-success'>" . $description_success . "</p>";
-			}
+?>
+				<h4>Edit Description</h4>
 			
-			if($user_data["id"] != $user_session_id)
-			{
+<?php			if(isset($description_success))
+				{
+					echo "<p class='text-success'>" . $description_success . "</p>";
+				}
+			
+				if($user_data["id"] != $user_session["id"])
+				{
 ?>
-				<form id="edit_description_form" action="/users/process_edit_description" method="post">
-<?php		}
-			else
-			{
+					<form id="edit_description_form" action="/users/process_edit_description/<?= $user_data['id'] ?>" method="post">
+<?php			}
+				else
+				{
 ?>
-				<form id="edit_description_form" action="/users/process_edit_description" method="post">
+					<form id="edit_description_form" action="/users/process_edit_description" method="post">
+<?php			}	?>
+						<textarea name="description" cols="150" rows="5"><?= $user_data["description"] ?></textarea>
+						<input type="submit" value="Save" class="btn btn-success" />
+					</form>
 <?php		}	?>
-
-				<textarea name="description" cols="150" rows="5"><?= $user_data["description"] ?></textarea>
-				<input type="submit" value="Save" class="btn btn-success" />
-			</form>
 		</div>
 	</div>
 </body>

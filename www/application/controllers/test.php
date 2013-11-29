@@ -9,21 +9,25 @@ class Test extends Main {
 	
 	public function index()
 	{
-		$this->load->view("home");
+		$this->view_data["title"] = "Home Page";
+		$this->load->view("home", $this->view_data);
 	}
 	
 	public function signin()
 	{
+		$this->view_data["title"] = "Signin Page";
 		$this->load->view("sign_in", $this->view_data);
 	}
 	
 	public function register()
 	{
+		$this->view_data["title"] = "Register";
 		$this->load->view("registration", $this->view_data);
 	}
 
 	public function process_signin()
 	{
+		$this->view_data["title"] = "Signin Page";
 		$this->load->library("form_validation");
 		$this->form_validation->set_rules("email", "Email", "trim|valid_email|required");
 		$this->form_validation->set_rules("password", "Password", "trim|min_length[8]|required|md5");
@@ -66,6 +70,7 @@ class Test extends Main {
 	
 	public function process_registration()
 	{
+		$this->view_data["title"] = "Register";
 		$this->load->library("form_validation");
 		$this->form_validation->set_rules("first_name", "First Name", "trim|required");
 		$this->form_validation->set_rules("last_name", "Last Name", "trim|required");
@@ -75,8 +80,8 @@ class Test extends Main {
 		
 		if($this->form_validation->run() === FALSE)
 		{
-			$view_data["registration_errors"] = validation_errors();
-			$this->load->view("registration", $view_data);
+			$this->view_data["registration_errors"] = validation_errors();
+			$this->load->view("registration", $this->view_data);
 		}
 		else
 		{

@@ -9,62 +9,68 @@ class Test extends Main {
 	
 	public function index()
 	{
-		$this->load->view("home");
-		$dbconnect = $this->load->database();
+		$this->view_data["title"] = "Home Page";
+		$this->load->view("home", $this->view_data);
 	}
 	
 	public function signin()
 	{
-		$this->load->view("sign_in");
+		$this->view_data["title"] = "Signin Page";
+		$this->load->view("sign_in", $this->view_data);
 	}
 	
 	public function register()
 	{
-		$this->load->view("registration");
+		$this->view_data["title"] = "Register";
+		$this->load->view("registration", $this->view_data);
 	}
-	
+
 	public function process_signin()
 	{
+		$this->view_data["title"] = "Signin Page";
 		$this->load->library("form_validation");
 		$this->form_validation->set_rules("email", "Email", "trim|valid_email|required");
 		$this->form_validation->set_rules("password", "Password", "trim|min_length[8]|required|md5");
 		
 		if($this->form_validation->run() === FALSE)
 		{
-			$data["login_errors"] = validation_errors();
-			$this->load->view("sign_in", $data);
+			$this->view_data["login_errors"] = validation_errors();
+			$this->load->view("sign_in", $this->view_data);
 		}
 		else
 		{
-			$user = $this->input->post();
-			$user_info = array("email" => $user["email"], "password" => $user["password"]);
-
 			$this->load->model("test_model");				   
-			$get_user = $this->test_model->get_user($user_info, NULL);
-			
-			if($get_user)
+			$get_user = $this->test_model->get_user($this->input->post(), NULL);
+
+			if (!$get_user)
 			{
-				if($get_user->user_level_id == 1)
-				{
-					$this->session->set_userdata("user_session", $get_user);
-					redirect(base_url("/users/dashboard/admin"));
-				}
-				else
-				{
-					$this->session->set_userdata("user_session", $get_user);
-					redirect(base_url("/users/dashboard"));
-				}
+				$this->view_data["login_errors"] = "Invalid email and password";
+				$this->load->view("sign_in", $this->view_data);
 			}
 			else
 			{
-				$data["login_errors"] = "Email not found in database or Incorrect password";
-				$this->load->view("sign_in", $data);
+				$user_info = array(
+					"id" => $get_user->id,
+					"first_name" => $get_user->first_name, 
+					"last_name" => $get_user->last_name, 
+					"email" => $get_user->email, 
+					"user_level_id" => $get_user->user_level_id, 
+					"is_logged_in" => TRUE
+				);
+
+				$this->session->set_userdata("user_session", $user_info);
+
+				if($get_user->user_level_id == ADMIN)
+					redirect(base_url("/users/dashboard/admin"));
+				else
+					redirect(base_url("/users/dashboard"));
 			}
 		}
 	}
 	
 	public function process_registration()
 	{
+		$this->view_data["title"] = "Register";
 		$this->load->library("form_validation");
 		$this->form_validation->set_rules("first_name", "First Name", "trim|required");
 		$this->form_validation->set_rules("last_name", "Last Name", "trim|required");
@@ -74,35 +80,45 @@ class Test extends Main {
 		
 		if($this->form_validation->run() === FALSE)
 		{
-			$data["registration_errors"] = validation_errors();
-			$this->load->view("registration", $data);
+			$this->view_data["registration_errors"] = validation_errors();
+			$this->load->view("registration", $this->view_data);
 		}
 		else
 		{
 			$user = $this->input->post();
-			$user_info = array("first_name" => $user["first_name"],
-							   "last_name" => $user["last_name"],
-							   "email" => $user["email"],
-							   "password" => $user["password"],
-							   "created_at" => date('Y-m-d H:i:s')
-							   );
+			$user_input = array("first_name" => $user["first_name"],
+				"last_name" => $user["last_name"],
+				"email" => $user["email"],
+				"password" => $user["password"],
+				"created_at" => date('Y-m-d H:i:s'),
+				"user_level_id" => USER
+			);
 			
 			$this->load->model("test_model");
-			$user_register = $this->test_model->insert_user($user_info);
+			$user_register = $this->test_model->insert_user($user_input);
+			
+			$this->load->model("test_model");
+			$user_register = $this->test_model->insert_user($user_input);
 			
 			if($user_register)
 			{
-				$this->session->set_userdata("user_session", $user_register);
-				$this->is_login();
-				redirect(base_url("/users/edit/" . $user_register->id));
+				$user_info = array(
+					"id" => $user_register->id,
+					"first_name" => $user_register->first_name, 
+					"last_name" => $user_register->last_name, 
+					"email" => $user_register->email, 
+					"user_level_id" => $user_register->user_level_id, 
+					"is_logged_in" => TRUE
+				);
+				
+				$this->session->set_userdata("user_session", $user_info);
+				redirect(base_url("/users/dashboard"));
+			}
+			else
+			{
+				$this->view_data["registration_errors"] = "Sorry, but your info has not been registered. Please try again.";
+				$this->load->view("registration", $this->view_data);
 			}
 		}
-	}
-	
-	public function logout()
-	{
-		$this->user_session = array();
-		$this->session = array();
-		$this->load->view("home");
 	}
 }

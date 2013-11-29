@@ -14,7 +14,16 @@ class Users extends Main {
 	}
 	
 	public function dashboard($user_level_info = NULL)
-	{		
+	{
+		if($user_level_info == "admin")
+		{
+			$this->view_data["title"] = "Admin Dashboard";
+		}
+		else
+		{
+			$this->view_data["title"] = "Dashboard";
+		}
+		
 		$this->load->model("test_model");
 		$user_info = $this->test_model->get_all_users();
 		
@@ -51,6 +60,7 @@ class Users extends Main {
 	
 	public function show($user_id)
 	{
+		$this->view_data["title"] = "User Information";
 		$this->load->model("test_model");
 		$user_info = $this->test_model->get_user(NULL, $user_id);
 		$messages = $this->test_model->get_messages($user_id);
@@ -89,6 +99,7 @@ class Users extends Main {
 	
 	public function post_message($user_id)
 	{
+		$this->view_data["title"] = "User Information";
 		$user_input = $this->input->post();
 		$user_input["created_at"] = date('Y-m-d H:i:s');
 		$user_input["user_id"] = $this->user_session["id"];
@@ -127,7 +138,7 @@ class Users extends Main {
 		
 		$this->view_data["row_counter"] = $counter;
 		
-		$view_data["administrator"] = $this->is_admin();
+		$this->view_data["administrator"] = $this->is_admin();
 		$this->load->view("user_info", $this->view_data);
 	}
 	
@@ -137,7 +148,12 @@ class Users extends Main {
 		
 		if($user_id != NULL)
 		{
+			$this->view_data["title"] = "Edit User";
 			$this->view_data["edit_other"] = $user_id;
+		}
+		else
+		{
+			$this->view_data["title"] = "Edit Profile";
 		}
 		
 		$user_id_info = $this->check_user_id($user_id);
@@ -160,7 +176,12 @@ class Users extends Main {
 		
 		if($user_id != NULL)
 		{
+			$this->view_data["title"] = "Edit User";
 			$this->view_data["edit_other"] = $user_id;
+		}
+		else
+		{
+			$this->view_data["title"] = "Edit Profile";
 		}
 		
 		$user_id_info = $this->check_user_id($user_id);
@@ -210,7 +231,12 @@ class Users extends Main {
 		
 		if($user_id != NULL)
 		{
+			$this->view_data["title"] = "Edit User";
 			$this->view_data["edit_other"] = $user_id;
+		}
+		else
+		{
+			$this->view_data["title"] = "Edit Profile";
 		}
 		
 		$user_id_info = $this->check_user_id($user_id);
@@ -255,7 +281,12 @@ class Users extends Main {
 		
 		if($user_id != NULL)
 		{
+			$this->view_data["title"] = "Edit User";
 			$this->view_data["edit_other"] = $user_id;
+		}
+		else
+		{
+			$this->view_data["title"] = "Edit Profile";
 		}
 		
 		$user_id_info = $this->check_user_id($user_id);
@@ -274,11 +305,13 @@ class Users extends Main {
 	
 	public function create_new()
 	{
-		$this->load->view("register_new_user");
+		$this->view_data["title"] = "New User";
+		$this->load->view("register_new_user", $this->view_data);
 	}
 	
 	public function process_create_new()
 	{
+		$this->view_data["title"] = "New User";
 		$this->load->library("form_validation");
 		$this->form_validation->set_rules("first_name", "First Name", "trim|required");
 		$this->form_validation->set_rules("last_name", "Last Name", "trim|required");
@@ -288,7 +321,7 @@ class Users extends Main {
 		
 		if($this->form_validation->run() === FALSE)
 		{
-			$view_data["registration_errors"] = validation_errors();
+			$this->view_data["registration_errors"] = validation_errors();
 		}
 		else
 		{
@@ -306,18 +339,19 @@ class Users extends Main {
 			
 			if($user_register)
 			{
-				$view_data["create_success"] = "You have successfully registered a new user";
+				$this->view_data["create_success"] = "You have successfully registered a new user";
 			}
 			else
 			{
-				$view_data["create_failed"] = "Sorry, but your info has not been registered. Please try again.";
+				$this->view_data["create_failed"] = "Sorry, but your info has not been registered. Please try again.";
 			}
 		}
-		$this->load->view("register_new_user", $view_data);
+		$this->load->view("register_new_user", $this->view_data);
 	}
 	
 	public function logout()
 	{
+		$this->view_data["title"] = "Home Page";
 		$user_session_data = $this->session->all_userdata();
 		
 		foreach($user_session_data as $key)

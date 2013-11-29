@@ -1,13 +1,4 @@
-<!DOCTYPE HTML>
-<html lang="en-US">
-<head>
-	<meta charset="UTF-8">
-	<title>Register</title>
-	<link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.css">
-	<link rel="stylesheet" href="/assets/css/test.css">
-</head>
-<body>
-	<div id="wrapper">
+<?php include "application/views/header.php"; ?>
 		<div class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<div class="navbar-header">
 				<a class="navbar-brand">Test App</a>

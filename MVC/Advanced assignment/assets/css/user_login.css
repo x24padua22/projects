@@ -1,0 +1,15 @@
+#wrapper{
+	width: 300px;
+	margin: 0px auto;
+}
+
+.div_form{
+	width: 300px;
+	padding: 0px 30px 20px 30px;
+	border:1px solid #000;
+	margin: 20px 0px;
+}
+
+label, input[type=submit]{
+	display: block;
+}

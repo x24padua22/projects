@@ -33,8 +33,8 @@
 		
 		public function edit_user($user_info)
 		{
-			$this->db->where("id", $user_info["id"]);
-			$this->db->update("users", $user_info);
+			$this->db->where("id", $user_info["id"])
+					 ->update("users", $user_info);
 			
 			return $this->db->where("id", $user_info["id"])
 							->get("users")
@@ -43,31 +43,39 @@
 		
 		public function get_all_users()
 		{
-			$all_users = $this->db->select("users.id, 
-											users.first_name, 
-											users.last_name, 
-											users.email, 
-											users.created_at, 
-											user_levels.user_level
-											")
-								  ->join("user_levels", "users.user_level_id = user_levels.id")
-								  ->get("users");
+			return $this->db->select("users.id, 
+				users.first_name, 
+				users.last_name, 
+				users.email, 
+				users.created_at, 
+				user_levels.user_level
+			")
+							->join("user_levels", "users.user_level_id = user_levels.id")
+							->get("users");
+		}
+		
+		public function delete_user($user_id)
+		{
+			return $this->db->delete("users", array("id" => $user_id));
 			
-			return $all_users;
 		}
 		
 		public function get_messages($user_id)
 		{
-			$posted_messages = $this->db->select("messages.message,
-												  messages.created_at,
-												  users.first_name,
-												  users.last_name,
-												  ")
-										->where("user_id", $user_id)
-										->join("users", "messages.user_id = users.id")
-										->get("messages");
-
-			return $posted_messages;
+			return $this->db->select("messages.message,
+									  messages.created_at,
+									  messages.user_id,
+									  users.first_name,
+									  users.last_name,
+									  ")
+							->where("posted_to", $user_id)
+							->join("users", "messages.user_id = users.id")
+							->get("messages");
+		}
+		
+		public function insert_message($message)
+		{
+			return $this->db->insert("messages", $message);
 		}
 	}
 

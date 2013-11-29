@@ -1,13 +1,4 @@
-<!DOCTYPE HTML>
-<html lang="en-US">
-<head>
-	<meta charset="UTF-8">
-	<title>User Information</title>
-	<link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.css">
-	<link rel="stylesheet" href="/assets/css/test.css">
-</head>
-<body>
-	<div id="wrapper">
+<?php include "application/views/header.php"; ?>
 		<div class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<div class="navbar-header">
 				<a href="/test" class="navbar-brand">Test App</a>
@@ -89,12 +80,7 @@
 					</div>
 <?php			}	?>
 				</div>
-<?php		}
-			else
-			{
-				die();
-			}
-?>
+<?php		}	?>
 		</div>
 	</div>
 </body>

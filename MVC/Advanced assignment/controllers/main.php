@@ -8,44 +8,37 @@ class Main extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->user_session = $this->session->userdata("user_session");
+		$this->view_data['user_session'] = $this->user_session = $this->session->userdata("user_session");
 	}
 	
-	public function is_login()
+	function index()
 	{
-		if($this->user_session == NULL)
-		{
-			$is_login = TRUE;
-			echo "yes";
-		}
-		else
-		{
-			echo "You don't have permission to access this page. Please sign in <a href='/test/signin'>here</a>.";
-			echo " Or go back to <a href='/test'>Home page</a>.";
-			
-		}
+
 	}
-	
-	public function set_user_data($user_info)
+
+	public function is_admin()
 	{
-		return array("id" => $user_info->id,
-					 "first_name" => $user_info->first_name,
-					 "last_name" => $user_info->last_name,
-					 "created_at" => $user_info->created_at,
-					 "id" => $user_info->id,
-					 "email" => $user_info->email,
-					 "description" => $user_info->description,
-					 "user_level_id" => $user_info->user_level_id
-					);
+		if($this->user_session["user_level_id"] == ADMIN)
+			return TRUE;
+		else 
+			return FALSE;
+	}
+
+	public function is_logged_in()
+	{
+		if($this->user_session["is_logged_in"] == TRUE)
+			return TRUE;
+		else 
+			return FALSE;
 	}
 	
 	public function check_user_id($user_id = NULL)
 	{
-		if($this->user_session->user_level_id == 1)
+		if($this->user_session["user_level_id"] == 1)
 		{
 			if($user_id == NULL)
 			{
-				$user_id_info = $this->user_session->id;
+				$user_id_info = $this->user_session["id"];
 			}
 			else
 			{
@@ -54,7 +47,7 @@ class Main extends CI_Controller {
 		}
 		else
 		{
-			$user_id_info = $this->user_session->id;
+			$user_id_info = $this->user_session["id"];
 		}
 		
 		return $user_id_info;
