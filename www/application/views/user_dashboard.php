@@ -8,38 +8,6 @@
 	<link rel="stylesheet" href="/assets/css/test.css">
 	<script src="/assets/jquery/jquery-2.0.3.js"></script>
 	<script src="/assets/jquery/jquery-ui.js"></script>
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$("#dialog_delete").dialog({
-				autoOpen: false,
-				resizable: false,
-				height: 200,
-				width: 250,
-				modal: true,
-				buttons: {
-					Yes: function()	{
-						document.location.href = "/users/dashboard/<?= $id[$i] ?>";
-					}
-					Cancel: function() {
-						$(this).dialog("close");
-					}
-				}
-				show: {
-					effect: "highlight",
-					duration: 500
-				},
-				hide: {
-					duration: 500
-				}
-			});
-			
-			$("#remove_user").click(function(){
-				$("#dialog_delete").dialog("open");
-				
-				return false;
-			});
-		};
-	</script>
 </head>
 <body>
 	<div id="wrapper">
@@ -129,7 +97,7 @@
 									<td>
 										<form action=""></form>
 										<a href="/users/edit/<?= $id[$i] ?>">edit</a>
-										<a id="remove_user" class="pull-right">remove</a>
+										<a href="/users/dashboard/<?= $id[$id] ?>" id="remove_user" class="pull-right">remove</a>
 										<div class="clearfix"></div>
 									</td>
 <?php							}	?>

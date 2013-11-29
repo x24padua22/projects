@@ -9,18 +9,26 @@
 	<div id="wrapper">
 		<div class="div_form">
 			<h3>Login</h3>
-			<?= $login_errors ?>
+<?php		if(isset($login_errors))
+			{
+				echo $login_errors;
+			}
+?>
 			<form id="login" action="/login/process_login" method="post">
-				<label for="email_login">Email: </label>
-				<input type="text" name="email_login"/>
-				<label for="password_login">Password</label>
-				<input type="password" name="password_login"/>
+				<label for="email">Email: </label>
+				<input type="text" name="email"/>
+				<label for="password">Password</label>
+				<input type="password" name="password"/>
 				<input type="submit" value="Login" />
 			</form>
 		</div>
 		<div class="div_form">
 			<h3>Register</h3>
-			<?= $registration_errors ?>
+<?php		if(isset($registration_errors))
+			{
+				echo $registration_errors;
+			}
+?>
 			<form id="register" action="/login/process_registration" method="post">
 				<label for="first_name">First Name: </label>
 				<input type="first_name" name="first_name"/>
