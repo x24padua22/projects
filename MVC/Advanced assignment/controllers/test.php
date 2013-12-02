@@ -39,8 +39,8 @@ class Test extends Main {
 		}
 		else
 		{
-			$this->load->model("test_model");				   
-			$get_user = $this->test_model->get_user($this->input->post(), NULL);
+			$this->load->model("user_model");				   
+			$get_user = $this->user_model->get_user($this->input->post(), NULL);
 
 			if (!$get_user)
 			{
@@ -86,19 +86,15 @@ class Test extends Main {
 		else
 		{
 			$user = $this->input->post();
-			$user_input = array("first_name" => $user["first_name"],
-				"last_name" => $user["last_name"],
-				"email" => $user["email"],
-				"password" => $user["password"],
-				"created_at" => date('Y-m-d H:i:s'),
-				"user_level_id" => USER
-			);
+			unset($user["confirm_password"]);
+			$user["created_at"] = date('Y-m-d H:i:s');
+			$user["user_level_id"] = USER;
 			
-			$this->load->model("test_model");
-			$user_register = $this->test_model->insert_user($user_input);
+			$this->load->model("user_model");
+			$user_register = $this->user_model->insert_user($user_input);
 			
-			$this->load->model("test_model");
-			$user_register = $this->test_model->insert_user($user_input);
+			$this->load->model("user_model");
+			$user_register = $this->user_model->insert_user($user_input);
 			
 			if($user_register)
 			{

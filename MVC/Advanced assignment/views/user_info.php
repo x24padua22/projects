@@ -40,47 +40,47 @@
 			</div>
 <?php		if(!empty($messages_info))
 			{
-?>
-				<div>
-<?php			for($i = 0; $i < $row_counter; $i++)
+				for($i = 0; $i < $row_counter; $i++)
 				{
-					$this->load->helper('date');
-					$posted_date = new DateTime(array_shift($messages_info["posted_at"]));
-					$current = new DateTime();
-					$interval  = $posted_date->diff($current);
-					
-					if($interval->y == 0 && $interval->m == 0 && $interval->d == 0)
-					{
-						if($interval->h != 0)
+?>
+					<div id="messages">
+<?php					$this->load->helper('date');
+						$posted_date = new DateTime(array_shift($messages_info["posted_at"]));
+						$current = new DateTime();
+						$interval  = $posted_date->diff($current);
+						
+						if($interval->y == 0 && $interval->m == 0 && $interval->d == 0)
 						{
-							$elapsed = $interval->h . " hours ago";
+							if($interval->h != 0)
+							{
+								$elapsed = $interval->h . " hours ago";
+							}
+							else
+							{
+								$elapsed = $interval->i . " minutes ago";
+							}
 						}
 						else
 						{
-							$elapsed = $interval->i . " minutes ago";
+							$elapsed = array_shift($messages_info["posted_at"]);
 						}
-					}
-					else
-					{
-						$elapsed = array_shift($messages_info["posted_at"]);
-					}
-?>					
-					<p>
-						<span class="pull-left">
-							<a href="/users/show/<?= array_shift($messages_info['posted_by_id']) ?>">
-								<?= array_shift($messages_info["posted_by"]) ?>
-							</a>
-						</span>
-						<span class="pull-right"><?= $elapsed ?></span>
-						<div class="clearfix"></div>
-					</p>
-					<div class="panel panel-default panel-body">
-<?php					echo array_shift($messages_info["message"]);
-?>
+	?>					
+						<p>
+							<span class="pull-left">
+								<a href="/users/show/<?= array_shift($messages_info['posted_by_id']) ?>">
+									<?= array_shift($messages_info["posted_by"]) ?>
+								</a>
+							</span>
+							<span class="pull-right"><?= $elapsed ?></span>
+							<div class="clearfix"></div>
+						</p>
+						<div class="panel panel-default panel-body">
+	<?php					echo array_shift($messages_info["message"]);
+	?>
+						</div>
 					</div>
-<?php			}	?>
-				</div>
-<?php		}	?>
+<?php			}	
+			}	?>
 		</div>
 	</div>
 </body>

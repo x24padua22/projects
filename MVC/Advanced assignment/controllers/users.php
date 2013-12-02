@@ -24,8 +24,8 @@ class Users extends Main {
 			$this->view_data["title"] = "Dashboard";
 		}
 		
-		$this->load->model("test_model");
-		$user_info = $this->test_model->get_all_users();
+		$this->load->model("user_model");
+		$user_info = $this->user_model->get_all_users();
 		
 		$counter = 0;
 		
@@ -49,7 +49,7 @@ class Users extends Main {
 		
 		if($user_level_info != NULL && $user_level_info != "admin")
 		{
-			$this->test_model->delete_user($user_level_info);
+			$this->user_model->delete_user($user_level_info);
 			$this->view_data["delete_success"] = "User has been successfully deleted.";
 		}
 		
@@ -61,9 +61,9 @@ class Users extends Main {
 	public function show($user_id)
 	{
 		$this->view_data["title"] = "User Information";
-		$this->load->model("test_model");
-		$user_info = $this->test_model->get_user(NULL, $user_id);
-		$messages = $this->test_model->get_messages($user_id);
+		$this->load->model("user_model");
+		$user_info = $this->user_model->get_user(NULL, $user_id);
+		$messages = $this->user_model->get_messages($user_id);
 		
 		$this->view_data["user_data"] = array(
 			"id" => $user_info->id,
@@ -105,10 +105,10 @@ class Users extends Main {
 		$user_input["user_id"] = $this->user_session["id"];
 		$user_input["posted_to"] = $user_id;
 		
-		$this->load->model("test_model");
-		$message_posted = $this->test_model->insert_message($user_input);
-		$user_info = $this->test_model->get_user(NULL, $user_id);
-		$messages = $this->test_model->get_messages($user_id);
+		$this->load->model("user_model");
+		$message_posted = $this->user_model->insert_message($user_input);
+		$user_info = $this->user_model->get_user(NULL, $user_id);
+		$messages = $this->user_model->get_messages($user_id);
 		
 		$this->view_data["user_data"] = array(
 			"id" => $user_info->id,
@@ -144,7 +144,7 @@ class Users extends Main {
 	
 	public function edit($user_id = NULL)
 	{
-		$this->load->model("test_model");
+		$this->load->model("user_model");
 		
 		if($user_id != NULL)
 		{
@@ -157,7 +157,7 @@ class Users extends Main {
 		}
 		
 		$user_id_info = $this->check_user_id($user_id);
-		$user_info = $this->test_model->get_user(NULL, $user_id_info);
+		$user_info = $this->user_model->get_user(NULL, $user_id_info);
 		
 		$this->view_data["user_data"] = array(
 			"id" => $user_info->id,
@@ -172,16 +172,18 @@ class Users extends Main {
 	
 	public function process_edit_profile($user_id = NULL)
 	{
-		$this->load->model("test_model");
+		$this->load->model("user_model");
 		
 		if($user_id != NULL)
 		{
 			$this->view_data["title"] = "Edit User";
 			$this->view_data["edit_other"] = $user_id;
+			$level = $this->input->post("user_level");
 		}
 		else
 		{
 			$this->view_data["title"] = "Edit Profile";
+			$level = ADMIN;
 		}
 		
 		$user_id_info = $this->check_user_id($user_id);
@@ -192,23 +194,13 @@ class Users extends Main {
 		
 		if($this->form_validation->run() === FALSE)
 		{
-			$user_info = $this->test_model->get_user(NULL, $user_id_info);
-			
-			$this->view_data["user_data"] = array(
-				"id" => $user_info->id,
-				"first_name" => $user_info->first_name,
-				"last_name" => $user_info->last_name,
-				"email" => $user_info->email,
-				"description" => $user_info->description
-			);
+			$user_info = $this->user_model->get_user(NULL, $user_id_info);
 			
 			$this->view_data["info_errors"] = validation_errors();
-			$this->load->view("edit_profile", $this->view_data);
 		}
 		else
 		{
 			$user = $this->input->post();
-			$level = $this->input->post("user_level");
 			$user_input = array(
 				"id" => $user_id_info,
 				"first_name" => $user["first_name"],
@@ -218,16 +210,27 @@ class Users extends Main {
 				"user_level_id" => $level
 			);
 			
-			$this->view_data["user_data"] = $this->test_model->edit_user($user_input);
+			$user_info = $this->user_model->edit_user($user_input);
 			
-			$this->view_data["info_success"] = "Your information was successfully changed!";
-			$this->load->view("edit_profile", $this->view_data);
+			if($user_info)
+			{				
+				$this->view_data["info_success"] = "Your information was successfully changed!";
+			}
 		}
+		$this->view_data["user_data"] = array(
+			"id" => $user_info->id,
+			"first_name" => $user_info->first_name,
+			"last_name" => $user_info->last_name,
+			"email" => $user_info->email,
+			"description" => $user_info->description
+		);
+
+		$this->load->view("edit_profile", $this->view_data);
 	}
 	
 	public function process_change_password($user_id = NULL)
 	{
-		$this->load->model("test_model");
+		$this->load->model("user_model");
 		
 		if($user_id != NULL)
 		{
@@ -246,18 +249,9 @@ class Users extends Main {
 		
 		if($this->form_validation->run() === FALSE)
 		{
-			$user_info = $this->test_model->get_user(NULL, $user_id_info);
-			
-			$this->view_data["user_data"] = array(
-				"id" => $user_info->id,
-				"first_name" => $user_info->first_name,
-				"last_name" => $user_info->last_name,
-				"email" => $user_info->email,
-				"description" => $user_info->description
-			);
-			
+			$user_info = $this->user_model->get_user(NULL, $user_id_info);
+						
 			$this->view_data["password_errors"] = validation_errors();
-			$this->load->view("edit_profile", $this->view_data);
 		}
 		else
 		{
@@ -268,16 +262,27 @@ class Users extends Main {
 				"updated_at" => date('Y-m-d H:i:s')
 			);
 			
-			$this->view_data["user_data"] = $this->test_model->edit_user($user_input);
+			$user_info = $this->user_model->edit_user($user_input);
 			
-			$this->view_data["password_success"] = "Your password was successfully changed!";
-			$this->load->view("edit_profile", $this->view_data);
+			if($user_info)
+			{			
+				$this->view_data["password_success"] = "Your password was successfully changed!";
+			}
 		}
+		$this->view_data["user_data"] = array(
+			"id" => $user_info->id,
+			"first_name" => $user_info->first_name,
+			"last_name" => $user_info->last_name,
+			"email" => $user_info->email,
+			"description" => $user_info->description
+		);
+
+		$this->load->view("edit_profile", $this->view_data);
 	}
 	
 	public function process_edit_description($user_id = NULL)
 	{
-		$this->load->model("test_model");
+		$this->load->model("user_model");
 		
 		if($user_id != NULL)
 		{
@@ -297,10 +302,21 @@ class Users extends Main {
 			"updated_at" => date('Y-m-d H:i:s')
 		);
 		
-		$this->view_data["user_data"] = $this->test_model->edit_user($user_input);
+		$user_info = $this->user_model->edit_user($user_input);
 		
-		$this->view_data["description_success"] = "Your profile description was successfully changed!";
-		$this->load->view("edit_profile", $this->view_data);
+		if($user_info)
+		{
+			$this->view_data["user_data"] = array(
+				"id" => $user_info->id,
+				"first_name" => $user_info->first_name,
+				"last_name" => $user_info->last_name,
+				"email" => $user_info->email,
+				"description" => $user_info->description
+			);
+			
+			$this->view_data["description_success"] = "Your profile description was successfully changed!";
+			$this->load->view("edit_profile", $this->view_data);
+		}
 	}
 	
 	public function create_new()
@@ -326,16 +342,12 @@ class Users extends Main {
 		else
 		{
 			$user = $this->input->post();
-			$user_input = array("first_name" => $user["first_name"],
-				"last_name" => $user["last_name"],
-				"email" => $user["email"],
-				"password" => $user["password"],
-				"created_at" => date('Y-m-d H:i:s'),
-				"user_level_id" => USER
-			);
+			unset($user["password"]);
+			$user["created_at"] = date('Y-m-d H:i:s');
+			$user["user_level_id"] = USER;
 			
-			$this->load->model("test_model");
-			$user_register = $this->test_model->insert_user($user_input);
+			$this->load->model("user_model");
+			$user_register = $this->user_model->insert_user($user);
 			
 			if($user_register)
 			{
