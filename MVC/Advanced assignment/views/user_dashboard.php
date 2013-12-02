@@ -6,20 +6,37 @@
 	<link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="/assets/css/jquery-ui.css">
 	<link rel="stylesheet" href="/assets/css/test.css">
-	<script src="/assets/jquery/jquery-2.0.3.js"></script>
+	<script src="/assets/jquery/jquery.js"></script>
 	<script src="/assets/jquery/jquery-ui.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#dialog_confirm").dialog(function(){
+				autoOpen: false,
+				modal:true,
+				buttons: {
+					Yes: function(){
+						location: "/users/delete/<?= $user["id"] ?>";
+					}
+					Cancel: function(){
+						$(this).dialog("close");
+					}
+				}
+			});
+			$("#delete_user").click(function(){
+				$("#dialog_confirm").dialog("open");
+			});
+		});
+	</script>
 </head>
 <body>
 	<div id="wrapper">
-		<div id="dialog_delete">
-			<p>Are you sure you want to delete this user?</p>
-		</div>
+		<div id="dialog_confirm">Are you sure you want to delete this user?</div>
 		<div class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<div class="navbar-header">
 				<a href="/test" class="navbar-brand">Test App</a>
 			</div>
 			<ul class="nav navbar-nav">
-<?php		if($administrator)
+<?php		if($is_admin)
 			{
 ?>
 				<li><a href="/users/dashboard/admin">Dashboard</a></li>
@@ -38,14 +55,14 @@
 			</ul>
 		</div>
 		<div id="main_contents">
-<?php		if($administrator)
+<?php		if($is_admin)
 			{
 ?>
 				<h3 class="col-md-10">Manage Users</h3>
 				<a href="/users/create_new" class="btn btn-primary">Add New</a>
 				<div class="clearfix"></div>
 <?php				
-				if(!empty($delete_success))
+				if(isset($delete_success))
 				{
 					echo $delete_success;
 				}
@@ -59,11 +76,12 @@
 			<table class="table table-bordered table-striped">
 				<thead>
 					<tr>
+						<th>ID</th>
 						<th>Name</th>
 						<th>Email</th>
 						<th>Created At</th>
 						<th>User Level</th>
-<?php					if($administrator)
+<?php					if($is_admin)
 						{
 ?>
 							<th>Actions</th>
@@ -71,33 +89,33 @@
 					</tr>
 				</thead>
 				<tbody>
-<?php					for($i = 0; $i < $row_counter; $i++)
-						{
-							$id[] = array_shift($user_data['id']);
-							$created_at = array_shift($user_data["created_at"])
+<?php					foreach($users as $user)
+						{	
 ?>						
 							<tr>
 								<td>
-									<a href="/users/show/<?= $id[$i] ?>">
-										<?= array_shift($user_data["name"]) ?>
+									<?= $user["id"] ?>
+								</td>
+								<td>
+									<a href="/users/show/<?= $user["id"] ?>">
+										<?= $user["first_name"] . " " . $user["last_name"] ?>
 									</a>
 								</td>
 								<td>
-									<?= array_shift($user_data["email"]) ?>
+									<?= $user["email"] ?>
 								</td>
 								<td>
-									<?= $created_at ?>
+									<?= $user["created_at"] ?>
 								</td>
 								<td>
-									<?= array_shift($user_data["user_level"]) ?>
+									<?= $user["user_level"] ?>
 								</td>
-<?php							if($administrator)
+<?php							if($is_admin)
 								{
 ?>
 									<td>
-										<form action=""></form>
-										<a href="/users/edit/<?= $id[$i] ?>">edit</a>
-										<a href="/users/dashboard/<?= $id[$id] ?>" id="remove_user" class="pull-right">remove</a>
+										<a href="/users/edit/<?= $user["id"] ?>">edit</a>
+										<a href="" id="delete_user" class="pull-right">remove</a>
 										<div class="clearfix"></div>
 									</td>
 <?php							}	?>

@@ -44,20 +44,21 @@
 		public function get_all_users()
 		{
 			return $this->db->select("users.id, 
-				users.first_name, 
-				users.last_name, 
-				users.email, 
-				users.created_at, 
-				user_levels.user_level
-			")
+									  users.first_name, 
+									  users.last_name, 
+									  users.email, 
+									  users.created_at, 
+									  user_levels.user_level")
 							->join("user_levels", "users.user_level_id = user_levels.id")
-							->get("users");
+							->get("users")
+							//->result();
+							->result_array();
 		}
 		
 		public function delete_user($user_id)
 		{
-			return $this->db->delete("users", array("id" => $user_id));
-			
+			return $this->db->where("id", $user_id)
+							->delete("users");
 		}
 		
 		public function get_messages($user_id)
@@ -70,7 +71,8 @@
 									  ")
 							->where("posted_to", $user_id)
 							->join("users", "messages.user_id = users.id")
-							->get("messages");
+							->get("messages")
+							->result_array();
 		}
 		
 		public function insert_message($message)

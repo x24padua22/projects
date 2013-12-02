@@ -9,6 +9,7 @@ class Main extends CI_Controller {
 	{
 		parent::__construct();
 		$this->view_data['user_session'] = $this->user_session = $this->session->userdata("user_session");
+		$this->view_data["is_admin"] = $this->is_admin();
 	}
 	
 	function index()
@@ -30,26 +31,5 @@ class Main extends CI_Controller {
 			return TRUE;
 		else 
 			return FALSE;
-	}
-	
-	public function check_user_id($user_id = NULL)
-	{
-		if($this->user_session["user_level_id"] == 1)
-		{
-			if($user_id == NULL)
-			{
-				$user_id_info = $this->user_session["id"];
-			}
-			else
-			{
-				$user_id_info = $user_id;
-			}
-		}
-		else
-		{
-			$user_id_info = $this->user_session["id"];
-		}
-		
-		return $user_id_info;
 	}
 }

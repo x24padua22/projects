@@ -4,7 +4,7 @@
 				<a href="/test" class="navbar-brand">Test App</a>
 			</div>
 			<ul class="nav navbar-nav">
-<?php		if($user_session["user_level_id"] == 1)
+<?php		if($user_session["user_level_id"] == ADMIN)
 			{
 ?>
 				<li><a href="/users/dashboard/admin">Dashboard</a></li>

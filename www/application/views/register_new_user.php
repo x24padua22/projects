@@ -10,7 +10,7 @@
 				<li><a href="/users/edit">Profile</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="/test/logout">Log Off</a></li>
+				<li><a href="/users/logout">Log Off</a></li>
 			</ul>
 		</div>
 		<div id="main_contents">

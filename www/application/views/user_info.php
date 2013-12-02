@@ -4,7 +4,7 @@
 				<a href="/test" class="navbar-brand">Test App</a>
 			</div>
 			<ul class="nav navbar-nav">
-<?php		if($administrator)
+<?php		if($is_admin)
 			{
 ?>
 				<li><a href="/users/dashboard/admin">Dashboard</a></li>
@@ -31,6 +31,11 @@
 				<li>Email Address: <?= $user_data["email"] ?></li>
 				<li>Desciption: <?= $user_data["description"] ?></li>
 			</ul>
+<?php		if(isset($message_error))
+			{
+?>
+				<p><?= $message_error; ?></p>
+<?php		}	?>
 			<div>
 				<form action="../post_message/<?= $user_data['id']?>" id="messages_form" method="post">
 					<label for="message">Leave a message for <?= $user_data["first_name"] ?></label>
@@ -40,12 +45,12 @@
 			</div>
 <?php		if(!empty($messages_info))
 			{
-				for($i = 0; $i < $row_counter; $i++)
+				foreach($messages_info as $message_data)
 				{
 ?>
 					<div id="messages">
 <?php					$this->load->helper('date');
-						$posted_date = new DateTime(array_shift($messages_info["posted_at"]));
+						$posted_date = new DateTime($message_data["created_at"]);
 						$current = new DateTime();
 						$interval  = $posted_date->diff($current);
 						
@@ -62,21 +67,20 @@
 						}
 						else
 						{
-							$elapsed = array_shift($messages_info["posted_at"]);
+							$elapsed = $message_data["created_at"];
 						}
 	?>					
 						<p>
 							<span class="pull-left">
-								<a href="/users/show/<?= array_shift($messages_info['posted_by_id']) ?>">
-									<?= array_shift($messages_info["posted_by"]) ?>
+								<a href="/users/show/<?= $message_data['user_id'] ?>">
+									<?= $message_data["first_name"] . " " . $message_data["last_name"] ?>
 								</a>
 							</span>
 							<span class="pull-right"><?= $elapsed ?></span>
 							<div class="clearfix"></div>
 						</p>
 						<div class="panel panel-default panel-body">
-	<?php					echo array_shift($messages_info["message"]);
-	?>
+						<?= $message_data["message"]; ?>
 						</div>
 					</div>
 <?php			}	
