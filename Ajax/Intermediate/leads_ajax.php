@@ -1,3 +1,6 @@
+<?php
+	require("connection.php");
+?>
 <!DOCTYPE HTML>
 <html lang="en-US">
 <head>
@@ -9,12 +12,22 @@
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$(".date").datepicker();
+			$("#name").keyup(function(){
+				$("#select_form").submit();
+			});
+			$("#select_form").submit(function(){
+				$.post($(this).attr("action"), $(this).serialize(), function(data){
+					$("#results").html(data.html);
+				},"json");
+				return false;
+			});
+			$("#select_form").submit();
 		});
 	</script>
 </head>
 <body>
 	<div id="wrapper">
-		<form id="select_leads" action="">
+		<form id="select_form" action="get_leads.php" method="post">
 			<label for="name">Name: </label>
 			<input type="text" name="name" id="name" />
 			<label for="from">From: </label>
@@ -23,6 +36,8 @@
 			<input type="text" name="to" id="to" class="date" />
 			<input type="submit" />
 		</form>
+		<div id="pagination"></div>
+		<div id="results"></div>
 	</div>
 </body>
 </html>
