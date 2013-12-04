@@ -1,0 +1,28 @@
+*{
+	font: arial;
+}
+
+#wrapper{
+	width: 750px;
+	margin: 0px auto;
+}
+
+form{
+	width: 660px;
+	margin: 30px auto;
+}
+
+.pages{
+	width: 20px;
+	height: 20px;
+	border:1px solid #000;
+}
+
+table{
+	width: 600px;
+	margin: 20px auto;
+}
+
+table, td{
+	border:1px solid #000;
+}
