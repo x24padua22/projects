@@ -9,18 +9,12 @@
 			$("#select_location").submit(function(){
 				var form = $(this);
 				$.get(form.attr("action")+"?callback=?", form.serialize(), function(data){
-					$.each(data, function(key, element){
-						console.log(key + " " + element);
-						$.each(element, function(new_key, new_element){
-							console.log(new_key + " " + new_element);
-							$.each(new_element, function(another_key, another_element){
-								$("#forecast").append("<p>Current temp F: " + another_element.temp_F + " degrees</p>");
-								$("#forecast").append("<p>Current temp C: " + another_element.temp_C + " degrees</p>");
-								$("#forecast").append("<p>Current Windspeed: " + another_element.windspeedMiles + " Mph</p>");
-								$("#forecast").append("<p>Weather Description: " + another_element.weatherDesc + "</p>");
-							});
-						});
-					});
+					var city = $("#city option:selected").text();
+					$("#forecast").append("<h4>Weather for: " + city + "</h4>")
+					$("#forecast").append("<p>Current temp C: " + data.data.current_condition[0].temp_C + " degrees</p>");
+					$("#forecast").append("<p>Current temp F: " + data.data.current_condition[0].temp_F + " degrees</p>");
+					$("#forecast").append("<p>Current Windspeed: " + data.data.current_condition[0].windspeedKmph + " kmph</p>");
+					$("#forecast").append("<p>Weather Desciption: " + data.data.current_condition[0].weatherDesc[0].value + "</p>");
 				},"json");
 				return false;
 			});
