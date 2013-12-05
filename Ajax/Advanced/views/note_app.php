@@ -11,9 +11,8 @@
 			$(this).on("click", ".note", function(){
 				var note_id = $(this).attr("id");
 				var note = $(this).html();
-				$(this).replaceWith("<form id='update_note' action='/notes/edit' method='post' >" +
-										"<textarea class='edit_note' name='desctiption'>" + note + "</textarea>" +
-										"<input type='hidden' name='id' value='" + note_id + "' />" +
+				$(this).replaceWith("<form id='update_note' action='/notes/edit/" + note_id + "' method='post' >" +
+										"<textarea class='edit_note' name='description'>" + note + "</textarea>" +
 										"<input type='submit' value='Save changes' />" +
 										"<input type='button' class='cancel' value='Cancel' />" +
 									"</form>");
@@ -21,7 +20,7 @@
 			
 			$(this).on("submit", "#update_note", function(){
 				var form = $(this);
-				$.post(form.attr("action"), form.serialize(), function(data){
+				$.getJSON(form.attr("action"), form.serialize(), function(data){
 					$("#message").text(data.message);
 					get_notes();
 				});

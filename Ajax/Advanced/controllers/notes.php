@@ -61,12 +61,13 @@ class Notes extends CI_Controller {
 		echo json_encode($data);
 	}
 	
-	public function edit()
+	public function edit($id)
 	{
-		$note = $this->input->post();
-		$note["updated_at"] = date("Y-m-d H:i:s");
+		$note_info = $this->input->get();
+		$note_info["id"] = $id;
+		$note_info["updated_at"] = date("Y-m-d H:i:s");
 		$this->load->model("note_model");
-		$updated_note = $this->note_model->edit_note($note);
+		$updated_note = $this->note_model->edit_note($note_info);
 		
 		if($updated_note)
 			$data["message"] = "Note has been updated.";

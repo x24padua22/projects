@@ -8,6 +8,7 @@
 		{
 			$student_id = $_POST["students"];
 		}
+		
 		$get_record = fetchAll("SELECT exam_results.student_id, exams.code, subjects.subject, grades.grade, status.status, exam_results.note
 								   FROM exam_results
 								   JOIN exams ON exams.id = exam_results.exam_id
