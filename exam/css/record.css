@@ -1,0 +1,18 @@
+#wrapper{
+	width: 800px;
+	margin: 20px auto;
+}
+
+.form-control{
+	width: 150px;
+	margin-bottom: 20px;
+}
+
+#students{
+	width: 250px;
+}
+
+#note{
+	width: 300px;
+	height: 100px;
+}

@@ -1,0 +1,17 @@
+#wrapper{
+	width: 1000px;
+	margin: 0px auto;
+}
+
+form{
+	width: 300px;
+	margin: 30px 50px;
+}
+
+.form-control{
+	width: 300px;
+}
+
+input[type=submit]{
+	float: right;
+}

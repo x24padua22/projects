@@ -8,7 +8,24 @@
 	<script type="text/javascript">
 		$(document).ready(function(){
 			get_notes();
-			$(this).on("click", ".note", function(){
+			
+			$("#post_note").submit(function(){
+				var form = $(this);
+				$.post(form.attr("action"), form.serialize(), function(data){
+					if(data.status)
+					{
+						$("#notes").append(data.new_note);
+					}
+					else
+					{
+						$("#error").text(data.error);
+					}
+				}, "json");
+				
+				return false;
+			});
+			
+			$("#notes").on("click", ".note", function(){
 				var note_id = $(this).attr("id");
 				var note = $(this).html();
 				$(this).replaceWith("<form id='update_note' action='/notes/edit/" + note_id + "' method='post' >" +
@@ -18,7 +35,7 @@
 									"</form>");
 			});
 			
-			$(this).on("submit", "#update_note", function(){
+			$("#notes").on("submit", "#update_note", function(){
 				var form = $(this);
 				$.getJSON(form.attr("action"), form.serialize(), function(data){
 					$("#message").text(data.message);
@@ -28,33 +45,16 @@
 				return false;
 			});
 			
-			$(this).on("click", ".cancel", function(){
+			$("#notes").on("click", ".cancel", function(){
 				get_notes();
 			});
 			
-			$(this).on("click", ".delete", function(){
+			$("#notes").on("click", ".delete", function(){
 				var note_id = $(this).attr("id");
 				$.getJSON("/notes/delete/"+note_id, function(data){
 					$("#message").text(data.message);
 					get_notes();
 				});
-				
-				return false;
-			});
-			
-			$("#post_note").submit(function(){
-				var form = $(this);
-				$.post(form.attr("action"), form.serialize(), function(data){
-					if(data.status)
-					{
-						$("label").before(data.message);
-						get_notes();
-					}
-					else
-					{
-						$("label").before(data.error);
-					}
-				}, "json");
 				
 				return false;
 			});
@@ -80,6 +80,7 @@
 	<div id="wrapper">
 		<div id="left_panel">
 			<h4>Add a note:</h4>
+			<p id="error"></p>
 			<form id="post_note" action="/notes/post_note" method="post">
 				<label for="title">Title:</label>
 				<input type="text" name="title" id="title" />

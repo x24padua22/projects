@@ -1,3 +1,6 @@
+CREATE DATABASE  IF NOT EXISTS `orm_exercise` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `orm_exercise`;
+
 -- phpMyAdmin SQL Dump
 -- version 3.5.1
 -- http://www.phpmyadmin.net

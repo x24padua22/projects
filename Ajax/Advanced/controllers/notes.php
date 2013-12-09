@@ -21,14 +21,14 @@ class Notes extends CI_Controller {
 		
 		if($notes)
 		{
-			foreach($notes->result() as $key)
+			foreach($notes->result() as $note)
 			{
-				$note[] = "<div class='note_container'><div class='title'>{$key->title}</div>
-						   <div class='note' id='{$key->id}'>{$key->description}</div>
-						   <p class='delete' id='{$key->id}'>Click here to delete {$key->title}</p></div>";
+				$notes_data[] = "<div class='note_container'><div class='title'>{$note->title}</div>
+								 <div class='note' id='{$note->id}'>{$note->description}</div>
+								 <p class='delete' id='{$note->id}'>Click here to delete {$note->title}</p></div>";
 			}
 			
-			$data["notes"] = $note;
+			$data["notes"] = $notes_data;
 			$data["status"] = true;
 		}
 		else
@@ -49,6 +49,9 @@ class Notes extends CI_Controller {
 		
 		if($post_note)
 		{
+			$data["new_note"] = "<div class='note_container'><div class='title'>{$post['title']}</div>
+								 <div class='note' id='{$this->db->insert_id()}'>{$post['description']}</div>
+								 <p class='delete' id='{$this->db->insert_id()}'>Click here to delete {$post['title']}</p></div>";
 			$data["message"] = "<p>Note successfully added.</p>";
 			$data["status"] = true;
 		}
