@@ -19,12 +19,9 @@ class User_model extends CI_Model
 						->row();
 	}
 	
-	function get_all_friends()
+	function get_all_users()
 	{
-		return $this->db->select("users.full_name, users.email, users.alias, users.id")
-						->where("user_id", $this->user_session["id"])
-						->join("users", "users.id = friends.friend_id")
-						->get("friends")
+		return $this->db->get("users")
 						->result_array();
 	}
 	

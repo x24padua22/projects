@@ -97,7 +97,7 @@ class Friends extends Main {
 	public function get_friends()
 	{
 		$this->load->model("user_model");
-		$get_friends = $this->user_model->get_all_friends();
+		$get_friends = $this->user_model->get_all_users();
 		
 		if($get_friends)
 		{
