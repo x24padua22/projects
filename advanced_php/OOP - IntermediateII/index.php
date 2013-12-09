@@ -15,17 +15,13 @@
 			<label for="country">Select Country: </label>
 			<select name="country" id="country">
 <?php
-				if(isset($_SESSION["start"]))
+				foreach($_SESSION["country_name"] as $key => $value)
 				{
-					foreach($_SESSION["country_name"] as $key => $value)
-					{
 ?>
-						<option value="<?= array_shift($_SESSION["country_code"]) ?>">
-							<?= $value ?>
-						</option>
-<?php				}
-				}
-?>
+					<option value="<?= array_shift($_SESSION["country_code"]) ?>">
+						<?= $value ?>
+					</option>
+<?php				}	?>
 			</select>
 			<input type="submit" value="Check Info" />
 		</form>
