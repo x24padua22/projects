@@ -1,0 +1,27 @@
+#wrapper{
+	width: 800px;
+	margin: 0px auto;
+}
+
+.forms{
+	width: 395px;
+	margin: 20px 0px;
+}
+
+label{
+	margin-top: 15px;
+}
+
+input{
+	width: 200px;
+	display: block;
+}
+
+input[type=submit]{
+	width: auto;
+	margin: 10px 0px;
+}
+
+table{
+	margin: 10px auto;
+}
