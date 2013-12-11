@@ -19,7 +19,7 @@ class Friends extends Main {
 		$this->load->library("form_validation");
 		$this->form_validation->set_rules("full_name", "Full Name", "trim|required|min_lenght[5]");
 		$this->form_validation->set_rules("alias", "Alias", "trim|required|min_length[3]");
-		$this->form_validation->set_rules("email", "Email", "trim|valid_email|required");
+		$this->form_validation->set_rules("email", "Email", "trim|valid_email|required|is_unique[users.email]");
 		$this->form_validation->set_rules("password", "Password", "trim|min_length[6]|required|matches[confirm_password]|md5");
 		$this->form_validation->set_rules("confirm_password", "Confirm Password", "trim|required|md5");
 		
@@ -28,7 +28,8 @@ class Friends extends Main {
 			$data["status"] = FALSE;
 			$data["errors"] = validation_errors();
 		}
-		else{
+		else
+		{
 			$user_input = $this->input->post();
 			unset($user_input["confirm_password"]);
 			$user_input["created_at"] = date("Y-m-d H:i:s");
@@ -38,7 +39,7 @@ class Friends extends Main {
 			if($insert_user)
 			{
 				$user_info = array(
-					"id" => $insert_user->id,
+					"id" => $this->db->insert_id(),
 					"is_logged_in" => TRUE
 				);
 				$this->session->set_userdata("user_session", $user_info);
