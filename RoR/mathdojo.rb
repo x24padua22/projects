@@ -2,16 +2,13 @@ class MathDojo
 	def add(*num)
 		puts "The sum of the array #{num} is:"
 		sum = 0
-		my_array = []
 		new_array = []
 
-		num.map {|element| my_array.push(element)}
-
-		for index in 0..my_array.count-1
-			if my_array[index].class == Array
-				my_array[index].map {|el| new_array.push(el)}
+		for index in 0..num.count-1
+			if num[index].class == Array
+				num[index].map {|el| new_array.push(el)}
 			else
-				sum += my_array[index]
+				sum += num[index]
 			end
 		end
 
@@ -25,16 +22,13 @@ class MathDojo
 	def subtract(*num)
 		puts "The difference of the array #{num} is:"
 		difference = 0
-		my_array = []
 		new_array = []
 
-		num.map {|element| my_array.push(element)}
-
-		for index in 0..my_array.count-1
-			if my_array[index].class == Array
-				my_array[index].map {|el| new_array.push(el)}
+		for index in 0..num.count-1
+			if num[index].class == Array
+				num[index].map {|el| new_array.push(el)}
 			else
-				difference -= my_array[index]
+				difference -= num[index]
 			end
 		end
 
