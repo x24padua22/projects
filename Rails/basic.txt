@@ -1,0 +1,59 @@
+rails new user_login_project
+cd user_login_project
+rails g model User first_name:string last_name:string email_address:string age:integer
+rake db:create
+rake db:migrate
+
+rails console
+u = User.new
+u.first_name = "Rozen"
+u.last_name = "Macapagal"
+u.email_address = "rmacapagal@village88.com"
+u.age = 23
+u.save
+
+u1 = User.new
+u1.first_name = "Zen"
+u1.last_name = "Macapagal"
+u1.email_address = "zen.macapagal@gmail.com"
+u1.age = 23
+u1.valid?
+u1.new_record?
+u1.save
+
+User.all
+exit
+# wrote the validations to app/models/user.rb
+
+rails console
+u = User.new
+u.first_name = "Z"
+u.email_address = "rmacapagal@village88.com"
+u.age = "abc"
+u.save
+# save fails
+e.errors
+e.errors.full_messages
+# shows the errors
+
+u.age = 5
+u.save
+# save fails again
+
+u.first_name = "Zi"
+u.last_name = "Mcpgl"
+u.age = 100
+u.save
+
+# retrieving users with different queries
+User.all
+User.first
+User.last
+User.order("first_name DESC")
+
+# select a particular record with ID = 3 then update the last_name: 
+u = User.find(3)
+u.update_attributes(last_name: "Layug")
+
+# delete a record with ID = 2
+User.find(2).destroy

@@ -1,0 +1,54 @@
+rails new dojo_ninjas
+cd dojo_ninjas
+rails g model Dojo name:string city:string state:string
+rails g model Ninja first_name:string last_name:string dojo:references
+rake db:create
+rake db:migrate
+
+rails console
+Dojo.new(:name => "CodingDojo Los Angeles", :state => "CA").save
+Dojo.new(:name => "CodingDojo Miami", :city => "Miami").save
+Dojo.new(:state => "NV").save
+Dojo.all
+exit
+# created the validations 
+rails console
+Dojo.find(1).destroy
+Dojo.destroy_all
+Dojo.new(:name => "CodingDojo Silicon Valley", :city => "Mountain View", :state => "CA").save
+Dojo.new(:name => "CodingDojo Seattle", :city => "Seattle", :state => "WA").save
+Dojo.new(:name => "CodingDojo New York", :city => "New York", :state => "NY").save
+d1 = Dojo.new(:name => "CodingDojo New York", :state => "NY")
+d1.save
+d1.errors
+d2 = Dojo.new(:name => "CodingDojo", :city => "City")
+d2.save
+d2.errors
+d3 = Dojo.new(:city => "New York", :state => "NY")
+d3.save
+d3.errors
+
+Ninja.new(:first_name => "Rozen", :last_name => "Macapagal", :dojo_id => 4).save
+Ninja.new(:first_name => "Diana", :last_name => "Manlulu", :dojo_id => 4).save
+Ninja.new(:first_name => "KB", :last_name => "Tonel", :dojo_id => 4).save
+Ninja.new(:first_name => "John", :last_name => "Supsupin", :dojo_id => 5).save
+Ninja.new(:first_name => "Mark", :last_name => "Guillen", :dojo_id => 5).save
+Ninja.new(:first_name => "Chris", :last_name => "Padua", :dojo_id => 5).save
+Ninja.new(:first_name => "Ian", :last_name => "Ejercito", :dojo_id => 6).save
+Ninja.new(:first_name => "Noah", :last_name => "Guillen", :dojo_id => 6).save
+Ninja.new(:first_name => "Oliver", :last_name => "Rosales", :dojo_id => 6).save
+
+# get Ninjas from Dojo 4, 5, 6
+Ninja.where(:dojo_id => 4)
+Ninja.where(:dojo_id => 5)
+Ninja.where(:dojo_id => 6)
+exit
+# edited the Dojo model so it will automatically delete the Ninja dependent to a particular Dojo
+rails console
+Dojo.find(4).destroy
+# deleted the Dojo with ID = 4 and all the Ninjas that has dojo_id = 4
+
+# select the first_name of Ninja whose dojo_id = 4, order by created_at DESC
+Ninja.select(:first_name).where(:dojo_id => 4).order("created_at DESC")
+# limit first 5 ninjas
+Ninja.limit(5)

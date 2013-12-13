@@ -1,0 +1,54 @@
+rails new blog_activity
+cd blog_activity
+rails g model Blog name:string description:text
+rails g model Post title:string content:text blog:references
+rails g model Message author:string message:text post:references
+rake db:create
+rake db:migrate
+
+rails console
+Blog.new(:name => "fffrozen", :description => "My personal blog").save
+Blog.new(:name => "Blog2", :description => "Second blog").save
+Blog.new(:name => "Blog3", :description => "Third blog").save
+Blog.new(:name => "Blog4", :description => "Fourth blog").save
+Blog.new(:name => "Blog5", :description => "Fifth blog").save
+
+Post.new(:title => "My First Post", :content => "Content of my first post on my blog", :blog_id => 1).save
+Post.new(:title => "My Second Post", :content => "Second post content", :blog_id => 1).save
+Post.new(:title => "My Third Post", :content => "Third post content", :blog_id => 1).save
+Post.new(:title => "Post1 for Blog2", :content => "Content1 for Blog2", :blog_id => 2).save
+Post.new(:title => "Post2 for Blog2", :content => "Content2 for Blog2", :blog_id => 2).save
+Post.new(:title => "Post3 for Blog2", :content => "Content3 for Blog2", :blog_id => 2).save
+Post.new(:title => "Post1 for Blog3", :content => "Content1 for Blog3", :blog_id => 3).save
+Post.new(:title => "Post2 for Blog3", :content => "Content2 for Blog3", :blog_id => 3).save
+Post.new(:title => "Post3 for Blog3", :content => "Content3 for Blog3", :blog_id => 3).save
+Post.new(:title => "Post1 for Blog4", :content => "Content1 for Blog4", :blog_id => 4).save
+Post.new(:title => "Post2 for Blog4", :content => "Content2 for Blog4", :blog_id => 4).save
+Post.new(:title => "Post3 for Blog4", :content => "Content3 for Blog4", :blog_id => 4).save
+Post.new(:title => "Post1 for Blog5", :content => "Content1 for Blog5", :blog_id => 5).save
+Post.new(:title => "Post2 for Blog5", :content => "Content2 for Blog5", :blog_id => 5).save
+Post.new(:title => "Post3 for Blog5", :content => "Content3 for Blog5", :blog_id => 5).save
+
+Message.new(:author => "Zen", :message => "this is a message for the First post", :post_id => 1).save
+Message.new(:author => "Rozen", :message => "another message for the First post", :post_id => 1).save
+Message.new(:author => "Zi", :message => "message for the First post", :post_id => 1).save
+Message.new(:author => "Author1", :message => "Message1 for the Post2", :post_id => 2).save
+Message.new(:author => "Author2", :message => "Message2 for the Post2", :post_id => 2).save
+Message.new(:author => "Author3", :message => "Message3 for the Post2", :post_id => 2).save
+Message.new(:author => "Author4", :message => "Message1 for the Post3", :post_id => 3).save
+Message.new(:author => "Author5", :message => "Message2 for the Post3", :post_id => 3).save
+Message.new(:author => "Author6", :message => "Message3 for the Post3", :post_id => 3).save
+
+# retrieving records
+Post.where(:blog_id => 1)
+Post.where(:blog_id => 5).order("title DESC")
+# updating records
+p = Post.find(1)
+p.update_attributes(:title => "First post new title")
+p.save
+# deleting record
+Post.find(3).destroy
+# this automatically deleted the messages dependent to Post id = 3
+# retrieving from Blogs
+Blog.all
+Blog.limit(4)
