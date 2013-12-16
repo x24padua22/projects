@@ -1,0 +1,8 @@
+rail g model Comment comment_content:text
+rake db:migrate
+# made the modifications in the model
+Create.new(:comment_content => "Comment", :commentable => User.first)
+Create.new(:comment_content => "Comment for blog", :commentable => Blog.first)
+Create.new(:comment_content => "Comment for blog", :commentable => Blog.find(2))
+Create.new(:comment_content => "Comment for post", :commentable => Post.find(3))
+Create.new(:comment_content => "Comment for message", :commentable => Message.find(2))

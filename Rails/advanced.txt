@@ -1,0 +1,67 @@
+rails new blog_advanced
+cd blog_advanced
+rails g model User first_name:string last_name:string email:string
+rails g model Blog name:string description:text
+rails g model Owner user:references blog:references
+rails g model Post title:string content:text blog:references user:references
+rails g model Message author:string message:text post:references user:references
+rake db:create
+rake db:migrate
+
+rails console
+
+User.new(:first_name => "Rozen", :last_name => "Macapagal", :email => "rmacapagal@village88.com").save
+User.new(:first_name => "Diana", :last_name => "Manlulu", :email => "dmanlulu@village88.com").save
+User.new(:first_name => "John", :last_name => "Supsupin", :email => "jsupsupin@village88.com").save
+User.new(:first_name => "KB", :last_name => "Tonel", :email => "ktonel@village88.com").save
+User.new(:first_name => "Michael", :last_name => "Choi", :email => "mchoi@village88.com").save
+User.all
+
+Blog.new(:name => "Blog1", :description => "First blog").save
+Blog.new(:name => "Blog2", :description => "Second blog").save
+Blog.new(:name => "Blog3", :description => "Third blog").save
+Blog.new(:name => "Blog4", :description => "Fourth blog").save
+Blog.new(:name => "Blog5", :description => "Fifth blog").save
+Blog.all
+
+# assignning users to blogs
+User.first.blogs = [Blog.first]
+User.first.blogs = [Blog.last]
+User.find(2).blogs = [Blog.find(2)]
+User.find(3).blogs = [Blog.find(2)]
+
+# creating posts
+Post.new(:title => "Post for first Blog", :content => "Content of the Post for first Blog by the first user", :blog_id => 1, :user_id => 1).save
+Post.new(:title => "Post for first Blog v2.0", :content => "Content of the second Post for first Blog by the first user", :blog_id => 1, :user_id => 1).save
+Post.new(:title => "Post for last Blog", :content => "Content of the third Post for the last Blog by the first user", :blog_id => 5, :user_id => 1).save
+Post.all
+
+# creating new blogs
+User.first.blogs.create(:name => "New Blog", :description => "New Description")
+
+#creating new post for blog2 by user1
+User.first.posts.create(:title => "New blog post", :content => "Content for the newly created post", :blog_id => 2).save
+
+Post.find(1).user
+Post.find(1).user = User.last
+
+# retrieving the info of the user who wrote the last message
+Message.last.user
+# change the owner of the last message to the first user
+Message.last.user = User.first
+
+# create messages written by different users
+Post.find(2).messages.create(:author => "Di", :message => "This is a message", :user_id => 2)
+Post.find(3).messages.create(:author => "Kristin", :message => "This is a message", :user_id => 4)
+Post.find(4).messages.create(:author => "Diana", :message => "This is a message", :user_id => 2)
+# retrieving all messages from a particular post
+Post.find(1).messages
+Post.find(2).messages
+Post.find(3).messages
+# retrieving user
+Blog.find(1).users
+Blog.find(2).users
+Blog.find(3).users
+Blog.find(4).users
+Blog.find(5).users
+Blog.find(6).users
