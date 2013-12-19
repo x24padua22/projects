@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= yield :title %></title>
+  <%= stylesheet_link_tag    "application", "bootstrap", :media => "all" %>
+  <%= javascript_include_tag "application", "bootstrap" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<a href="/products">Home</a>
+
+<%= yield %>
+
+</body>
+</html>

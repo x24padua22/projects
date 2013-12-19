@@ -1,0 +1,24 @@
+<% content_for :title do %>Add a new user<% end %>
+
+<div id="wrapper">
+	<h3>Register</h3>
+	<form action="/users" method="post">
+		<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+		<label for="first_name">First Name:</label>
+		<input type="text" name="first_name" id="first_name" />
+		<div class="clear"></div>
+		<label for="last_name">Last Name:</label>
+		<input type="text" name="last_name" id="last_name" />
+		<div class="clear"></div>
+		<label for="email">Email</label>
+		<input type="text" name="email" id="email" />
+		<div class="clear"></div>
+		<label for="password">Password:</label>
+		<input type="password" name="password" id="password" />
+		<div class="clear"></div>
+		<label for="confirm_password">Confirm Password:</label>
+		<input type="password" name="password_confirmation" id="confirm_password" />
+		<div class="clear"></div>
+		<input type="submit" value="Register" />
+	</form>
+</div>

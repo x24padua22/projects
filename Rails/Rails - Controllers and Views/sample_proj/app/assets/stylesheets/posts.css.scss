@@ -1,0 +1,35 @@
+// Place all the styles related to the Posts controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#wrapper{
+	font-family: Arial;
+	width: 800px;
+	margin: 0px auto;
+}
+
+label{
+	display: block;
+	margin-top: 10px;
+}
+
+input[type=submit]{
+	display: block;
+}
+
+table{
+	width: 600px;
+	border:1px solid gray;
+	margin: 0px auto;
+}
+
+th{
+	color: blue;
+	border:1px solid blue;
+}
+
+td{
+	border:1px solid gray;
+	margin: 0px;
+	padding: 3px;
+}
