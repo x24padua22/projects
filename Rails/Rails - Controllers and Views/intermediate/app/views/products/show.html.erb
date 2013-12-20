@@ -1,2 +1,11 @@
-<h1>Products#show</h1>
-<p>Find me in app/views/products/show.html.erb</p>
+<% content_for :title do %>Add product<% end %>
+
+<div id="wrapper">
+	<h3><%= @product.name %></h3>
+	<ul>
+		<li>Product ID: <%= @product.id %></li>
+		<li>Product price: <%= @product.pricing %></li>
+		<li>Product description: <%= @product.description %></li>
+		<li>Product category: <%= @category.name %></li>
+	</ul>
+</div>

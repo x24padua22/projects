@@ -39,3 +39,4 @@ gem 'jquery-rails'
 
 gem 'hirb'
 gem 'bootstrap-sass', '~> 3.0.3.0'
+gem 'simple_form'

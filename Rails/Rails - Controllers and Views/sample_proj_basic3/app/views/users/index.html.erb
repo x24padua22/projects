@@ -1,0 +1,39 @@
+<% content_for :title do %>Display all users<% end %>
+
+<div id="wrapper">
+	<h1>Users</h1>
+
+	<% if flash[:notice] %>
+		<%= flash[:notice] %>
+	<% end %>
+	
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th>Email</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @users.each do |user| %>
+			<tr>
+				<td><%= user.first_name %></td>
+				<td><%= user.last_name %></td>
+				<td><%= user.email %></td>
+				<td>
+					<a href="/users/<%= user.id %>" class="btn btn-default">Show</a>
+					<a href="/users/<%= user.id %>/edit" class="btn btn-primary">Edit</a>
+					<a>
+						<%= link_to 'Destroy', user, :method => :delete,
+						data: { confirm: 'Are you sure you want to delete this user?' },
+                    	:class => "btn btn-danger" %>
+					</a>
+				</td>
+			</tr>
+			<% end %>
+		</tbody>
+	</table>
+	<a href="users/new">Add new user</a>
+</div>

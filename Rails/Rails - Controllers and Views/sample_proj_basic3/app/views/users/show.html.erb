@@ -1,0 +1,9 @@
+<% content_for :title do %>User Information<% end %>
+
+<div id="wrapper">
+	<h3><%= @user.first_name + " " + @user.last_name %></h3>
+	<ul>
+		<li>User ID: <%= @user.id %></li>
+		<li>User email: <%= @user.email %></li>
+	</ul>
+</div>

@@ -12,6 +12,29 @@
 }
 
 input{
-	display: block;
 	margin-bottom: 10px;
+}
+
+textarea{
+	height: 50px;
+}
+
+input, textarea, select{
+	display: block;
+	width: 200px;
+	margin-bottom: 10px;
+}
+
+input[type=submit]{
+	width: auto;
+}
+
+#product_pricing{
+	margin: 0px;
+}
+
+.hint{
+	display: inline;
+	font-style: italic;
+	font-size: .8em;
 }

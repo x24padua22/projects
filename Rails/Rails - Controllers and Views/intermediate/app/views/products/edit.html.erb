@@ -1,2 +1,17 @@
-<h1>Products#edit</h1>
-<p>Find me in app/views/products/edit.html.erb</p>
+<% content_for :title do %>Edit product<% end %>
+
+<div id="wrapper">
+	<h3>Edit product #<%= @product.id %></h3>
+
+	<% if flash[:notice] %>
+		<%= flash[:notice] %>
+	<% end %>
+	
+	<%= simple_form_for @product do |f| %>
+	<%= f.input :name %>
+	<%= f.input :description %>
+	<%= f.input :pricing, :hint => "price should be in PHP" %>
+	<%= f.association :category, :include_blank => false %>
+	<%= f.button :submit, :class => "btn btn-primary" %>
+	<% end %>
+</div>

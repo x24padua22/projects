@@ -5,6 +5,7 @@ class ProductsController < ApplicationController
 
   def show
     @product = Product.find(params[:id])
+    @category = Product.find(params[:id]).category
   end
 
   def new
@@ -19,7 +20,7 @@ class ProductsController < ApplicationController
     @product = Product.new(params[:product])
 
     if @product.save
-      @product = User.all
+      @products = Product.all
       flash[:notice] = "You have successfully added a new product!"
       render action: "index"
     else
@@ -31,7 +32,7 @@ class ProductsController < ApplicationController
     @product = Product.find(params[:id])
 
     if @product.update_attributes(params[:product])
-      @product = Product.all
+      @products = Product.all
       flash[:notice] = "Product information has been updated."
       render action: "index"
     else
@@ -40,5 +41,15 @@ class ProductsController < ApplicationController
   end
 
   def destroy
+    @product = Product.find(params[:id])
+    
+    if @product.destroy
+      flash[:notice] = "Product has been deleted."
+    else
+      flash[:notice] = "Sorry, the product was not deleted."
+    end
+
+    @products = Product.all
+    render action: "index"
   end
 end
