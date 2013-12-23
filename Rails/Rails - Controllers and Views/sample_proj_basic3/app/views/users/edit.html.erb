@@ -2,6 +2,13 @@
 
 <div id="wrapper">
 	<h3>Edit user #<%= @user.id %></h3>
+
+	<% if flash[:errors] %>
+		<% flash[:errors].each do |error| %>
+			<p class="text-danger"><%= error %></p>
+		<% end %>
+	<% end %>
+	
 	<%= simple_form_for @user do |f| %>
 		<%= f.input :first_name %>
 		<%= f.input :last_name %>

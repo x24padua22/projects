@@ -1,0 +1,10 @@
+<% content_for :title do %>Comment<% end %>
+
+<div id="wrapper">
+	<h3>Comment # <%= @comment.id %></h3>
+	<ul>
+		<li>comment for: <strong><%= @comment.product.name %></strong></li>
+		<li>comment: <strong><%= @comment.content %></strong></li>
+		<li>comment author: <strong><%= @comment.author %></strong></li>
+	</ul>
+</div>

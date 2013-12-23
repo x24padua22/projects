@@ -1,0 +1,18 @@
+<% content_for :title do %>Edit Comment<% end %>
+
+<div id="wrapper">
+	<h3>Edit Comment # <%= @comment.id %></h3>
+
+	<% if flash[:errors] %>
+		<% flash[:errors].each do |error| %>
+			<p class="text-danger"><%= error %></p>
+		<% end %>
+	<% end %>
+	
+	<%= simple_form_for @comment do |f| %>
+	<%= f.input :content %>
+	<%= f.input :author %>
+	<%= f.association :product, :include_blank => false %>
+	<%= f.button :submit, :class => "btn btn-primary", :id => "btn_new" %>
+	<% end %>
+</div>

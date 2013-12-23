@@ -1,0 +1,51 @@
+// Place all the styles related to the Comments controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#wrapper{
+	width: 800px;
+	margin: 0px auto;
+}
+
+.btn{
+	padding: 1px 10px;
+}
+
+input{
+	margin-bottom: 10px;
+}
+
+textarea{
+	height: 50px;
+}
+
+input, textarea, select{
+	display: block;
+	width: 200px;
+}
+
+label{
+	margin-top: 10px;
+}
+
+input[type=submit]{
+	width: auto;
+}
+
+#product_pricing{
+	margin: 0px;
+}
+
+.hint{
+	display: inline;
+	font-style: italic;
+	font-size: .8em;
+}
+
+h4{
+	margin-top: 50px;
+}
+
+#btn_new{
+	margin-top: 10px;
+}

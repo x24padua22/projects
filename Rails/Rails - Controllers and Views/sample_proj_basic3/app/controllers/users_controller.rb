@@ -13,9 +13,10 @@ class UsersController < ApplicationController
   	if @user.save
       @users = User.all
       flash[:notice] = "You have successfully registered!"
-  		render action: "index"
+  		render "new"
   	else
-  		render action: "new"
+      flash[:errors] = @user.errors.full_messages
+  		redirect_to new_user_path
   	end
   end
 
@@ -33,9 +34,10 @@ class UsersController < ApplicationController
     if @user.update_attributes(params[:user])
       @users = User.all
       flash[:notice] = "User information has been updated."
-      render action: "index"
+      redirect_to user_path
     else
-      render action: "edit"
+      flash[:errors] = @user.errors.full_messages
+      redirect_to edit_user_path
     end
   end
 
@@ -49,6 +51,6 @@ class UsersController < ApplicationController
     end
 
     @users = User.all
-    render action: "index"
+    render "new"
   end
 end

@@ -1,0 +1,19 @@
+<% content_for :title do %>Add product<% end %>
+
+<div id="wrapper">
+	<h3>Add new Product</h3>
+
+	<% if flash[:errors] %>
+		<% flash[:errors].each do |error| %>
+			<p class="text-danger"><%= error %></p>
+		<% end %>
+	<% end %>
+	
+	<%= simple_form_for @product do |f| %>
+	<%= f.input :name %>
+	<%= f.input :description %>
+	<%= f.input :pricing, :hint => "price should be in PHP" %>
+	<%= f.association :category, :include_blank => false %>
+	<%= f.button :submit, :class => "btn btn-primary" %>
+	<% end %>
+</div>

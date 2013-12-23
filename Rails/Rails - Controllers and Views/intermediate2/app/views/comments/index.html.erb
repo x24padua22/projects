@@ -1,0 +1,34 @@
+<% content_for :title do %>Comments<% end %>
+
+<div id="wrapper">
+	<h1>Comments</h1>
+	
+	<% if flash[:notice] %>
+		<%= flash[:notice] %>
+	<% end %>
+	
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>Comment for</th>
+				<th>Content</th>
+				<th>Comment Author</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @comments.each do |comment| %>
+			<tr>
+				<td><%= comment.product.name %></td>
+				<td><%= comment.content %></td>
+				<td><%= comment.author %></td>
+				<td>
+					<a href="/comments/<%= comment.id %>" class="btn btn-default">Show</a>
+					<a href="/comments/<%= comment.id %>/edit" class="btn btn-primary">Edit</a>
+				</td>
+			</tr>
+			<% end %>
+		</tbody>
+	</table>
+	<a href="/comments/new" class="btn btn-primary">Create new comment</a>
+</div>

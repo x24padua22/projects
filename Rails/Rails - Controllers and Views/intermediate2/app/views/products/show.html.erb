@@ -1,0 +1,35 @@
+<% content_for :title do %>Product Information<% end %>
+
+<div id="wrapper">
+	<h3><%= @product.name %></h3>
+	<ul>
+		<li>Product ID: <strong><%= @product.id %></strong></li>
+		<li>Product price: <strong><%= @product.pricing %></strong></li>
+		<li>Product description: <strong><%= @product.description %></strong></li>
+		<li>Product category: <strong><%= @category.name %></strong></li>
+	</ul>
+	<h4>Comments for <%= @product.name %></h4>
+	<% if @comments %>
+		<% @comments.each do |comment| %>
+			<div id="comments">
+				<p class="well"><%= comment.content %></p>
+				<em class="pull-right">comment from <%= comment.author %></em>
+				<div class="clear-fix"></div>
+			</div>
+		<% end %>
+	<% end %>
+
+	<% if flash[:errors] %>
+		<% flash[:errors].each do |error| %>
+			<p class="text-danger"><%= error %></p>
+		<% end %>
+	<% end %>
+	
+	<p><strong>Add new comment for <%= @product.name %></strong></p>
+	<%= simple_form_for @comment do |f| %>
+		<%= f.input :content %>
+		<%= f.input :author %>
+		<%= f.input :product_id, :as => :hidden %>
+		<%= f.button :submit, :class => "btn btn-primary", :id => "btn_new" %>
+	<% end %>
+</div>
