@@ -1,0 +1,28 @@
+<% content_for :title do %>User Information<% end %>
+
+<div id="wrapper">
+	<h3>User <%= @user.id %></h3>
+	<ul>
+		<li>Username: <strong><%= @user.name %></strong></li>
+		<li>Email: <strong><%= @user.email %></strong></li>
+	</ul>
+	<h4>Comments for <%= @user.name %></h4>
+
+	<% if @comments %>
+		<% @comments.each do |comment| %>
+			<div id="comments">
+				<p class="well"><%= comment.content %></p>
+				<em class="pull-right">comment from <%= comment.user.name %></em>
+				<div class="clear-fix"></div>
+			</div>
+		<% end %>
+	<% end %>
+	
+	<p><strong>Add new comment for <%= @user.name %></strong></p>
+	
+	<%= simple_form_for @comment do |f| %>
+		<%= f.input_field :user_id, :value => @user.id, :as => :hidden %>
+		<%= f.input :content, :input_html => { :rows => 3 } %>
+		<%= f.button :submit, :class => "btn btn-primary", :id => "btn_new" %>
+	<% end %>
+</div>

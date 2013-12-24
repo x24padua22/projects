@@ -1,0 +1,31 @@
+<% content_for :title do %>Display all Users<% end %>
+
+<div id="wrapper">
+	<h1>All Users</h1>
+	
+	<% if flash[:notice] %>
+		<%= flash[:notice] %>
+	<% end %>
+	
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Email</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @users.each do |user| %>
+			<tr>
+				<td><%= user.id %></td>
+				<td><%= user.first_name + " " + user.last_name %></td>
+				<td><%= user.email %></td>
+				<td><%= user.description %></td>
+			</tr>
+			<% end %>
+		</tbody>
+	</table>
+	<a href="/signup">Add new user</a>
+</div>
