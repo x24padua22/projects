@@ -1,0 +1,44 @@
+<% content_for :title do %>Home<% end %>
+
+<div id="wrapper">
+	<h3>Welcome, <%= @user.first_name %></h3>
+	<h4>You have <a href="users/show"><%= @friends.count %> friends</a></h4>
+	
+	<% if flash[:notice] %>
+		<%= flash[:notice] %>
+	<% end %>
+	
+	<p>Notification:</p>
+	<table id="noti">
+		<% @invites.each do |invite| %>	
+			<tr>
+				<td><%= invite.user.first_name + " " + invite.user.last_name %></td>
+				<td><%= link_to 'Accept', friendships_path, :method => :put %></td>
+				<td>
+					<%= link_to 'Ignore', friendships_path(invite), :method => :delete,
+					data: { confirm: 'Are you sure you want to delete friend invite?' } %>
+				</td>
+			</tr>
+		<% end %>
+	</table>
+
+	<p>People you may want to add as friend</p>
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Email</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @others.each do |other_user| %>
+			<tr>
+				<td><%= other_user.user.first_name + " " + other_user.user.last_name %></td>
+				<td><%= other_user.user.email %></td>
+				<td><%= link_to 'Add as Friend', new_friendship_path(other_user), :method => :get %></td>
+			</tr>
+			<% end %>
+		</tbody>
+	</table>
+</div>

@@ -1,0 +1,20 @@
+<div id="wrapper">
+	<h3>Welcome, <%= @user.first_name %></h3>
+	<p>List of Friends</p>
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Email</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @friends.each do |friend| %>
+			<tr>
+				<td><%= friend.user.first_name + " " + friend.user.last_name %></td>
+				<td><%= friend.user.email %></td>
+			</tr>
+			<% end %>
+		</tbody>
+	</table>
+</div>
