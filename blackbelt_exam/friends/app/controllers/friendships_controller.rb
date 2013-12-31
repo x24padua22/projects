@@ -12,7 +12,7 @@ class FriendshipsController < ApplicationController
   		flash[:notice] = "Failed to accept the invite."
   	end	
 
-  	render "show"
+  	redirect_to :back
   end
 
   def destroy
@@ -24,7 +24,7 @@ class FriendshipsController < ApplicationController
   		flash[:notice] = "Failed to ignore the invite."
   	end
 
-  	redirect_to users_path
+  	redirect_to :back
   end
 
   def new
@@ -32,12 +32,17 @@ class FriendshipsController < ApplicationController
   end
 
   def create
-  	@friendship = Friendship.new(params[:friendship])
+  	@friendship = Friendship.new()
+    @friendship.user_id = current_user.id
+    @friendship.friend_id = params[:id]
+    @friendship.status_id = 2
     
     if @friendship.save
-      redirect_to users_path, notice: 'friend invite sent'
+      flash[:notice] = "Friend invite sent"
     else
-      render action: "new"
+      flash[:notice] = "Sorry, but there seems to be an error in adding the user as friend."
     end
+
+    redirect_to :back
   end
 end

@@ -11,8 +11,8 @@
 		<tbody>
 			<% @friends.each do |friend| %>
 			<tr>
-				<td><%= friend.user.first_name + " " + friend.user.last_name %></td>
-				<td><%= friend.user.email %></td>
+				<td><%= friend.first_name + " " + friend.last_name %></td>
+				<td><%= friend.email %></td>
 			</tr>
 			<% end %>
 		</tbody>

@@ -1,15 +1,7 @@
 Friends::Application.routes.draw do
-  
-  get "invites/new"
-
-  get "friends/update"
-
-  get "friends/destroy"
 
   resources :users
   resources :friendships
-  resources :friends
-  resources :invites
   resources :sessions, :only => [:new, :create, :destroy]
 
   match "/signup",  :to => 'users#new'

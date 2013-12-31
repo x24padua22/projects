@@ -2,7 +2,7 @@
 
 <div id="wrapper">
 	<h3>Welcome, <%= @user.first_name %></h3>
-	<h4>You have <a href="users/show"><%= @friends.count %> friends</a></h4>
+	<h4>You have <a href="users/show"><%= @friends1.count + @friends2.count %> friends</a></h4>
 	
 	<% if flash[:notice] %>
 		<%= flash[:notice] %>
@@ -16,7 +16,7 @@
 				<td><%= link_to 'Accept', friendships_path, :method => :put %></td>
 				<td>
 					<%= link_to 'Ignore', friendships_path(invite), :method => :delete,
-					data: { confirm: 'Are you sure you want to delete friend invite?' } %>
+					confirm: 'Are you sure you want to delete friend invite?' %>
 				</td>
 			</tr>
 		<% end %>
@@ -34,9 +34,9 @@
 		<tbody>
 			<% @others.each do |other_user| %>
 			<tr>
-				<td><%= other_user.user.first_name + " " + other_user.user.last_name %></td>
-				<td><%= other_user.user.email %></td>
-				<td><%= link_to 'Add as Friend', new_friendship_path(other_user), :method => :get %></td>
+				<td><%= other_user.first_name + " " + other_user.last_name %></td>
+				<td><%= other_user.email %></td>
+				<td><%= link_to 'Add as Friend', friendships_path(other_user), :method => :post %></td>
 			</tr>
 			<% end %>
 		</tbody>
