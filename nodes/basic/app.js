@@ -1,45 +1,61 @@
-var http = require('http');
-var fs = require('fs');
-//creating a server
-server = http.createServer(function (request, response){
-  response.writeHead(200, {'Content-type': 'text/html'});
-  console.log('Request', request.url);
-  if(request.url === '/')
-  {
-    fs.readFile('views/index.html', 'utf8', function (errors, contents){
-      response.writeHeader(200, {"Content-Type": "text/html"});
-      response.write(contents); 
-      response.end();
+var port = 7077;
+ 
+var http = require("http");
+var path = require("path"); 
+var fs = require("fs");     
+ 
+console.log("Starting web server at port: " + port);
+ 
+http.createServer( function(req, res) {
+ 
+  var filename = req.url || "index.html";
+  var ext = path.extname(filename);
+  var localPath = __dirname+"/views";
+  var validExtensions = {
+    ".html" : "text/html",      
+    ".jpg": "image/jpeg",
+  };
+  var isValidExt = validExtensions[ext];
+
+  if (isValidExt) {
+    
+    localPath += filename;
+    path.exists(localPath, function(exists) {
+      if(exists) {
+        console.log("Serving file: " + localPath);
+        getFile(localPath, res, ext);
+      }
+      else if(req.url === '/cars/new.html')
+      {
+        fs.readFile('views/new.html', 'utf8', function (errors, contents){
+          res.write(contents); 
+          res.end();
+        });
+      }
+      else {
+        console.log("File not found: " + localPath);
+        res.writeHead(404);
+        res.end();
+      }
     });
+ 
+  } else {
+    console.log("Invalid file extension detected: " + ext)
   }
-  else if(request.url === '/cats.html')
-  {
-    fs.readFile('views/cats.html', 'utf8', function (errors, contents){
-      response.writeHeader(200, {"Content-Type": "text/html"});
-      response.write(contents);
-      response.end();
-    });
-  }
-  else if(request.url === '/cars.html')
-  {
-    fs.readFile('views/cars.html', 'utf8', function (errors, contents){
-      response.writeHeader(200, {"Content-Type": "text/html"});
-      response.write(contents);
-      response.end();
-    });
-  }
-  else if(request.url === '/cars/new.html')
-  {
-    fs.readFile('views/new.html', 'utf8', function (errors, contents){
-      response.writeHeader(200, {"Content-Type": "text/html"});
-      response.write(contents);
-      response.end();
-    });
-  }
-  else
-  {
-    response.end('File not found!!!');
-  }
-});
-server.listen(7077);
-console.log("Running in localhost at port 7077");
+ 
+}).listen(port);
+ 
+function getFile(localPath, res, mimeType) {
+  fs.readFile(localPath, function(err, contents) {
+    if(!err) {
+      res.setHeader("Content-Length", contents.length);
+      res.setHeader("Content-Type", mimeType);
+      res.statusCode = 200;
+      res.end(contents);
+    }
+    else {
+      res.writeHead(500);
+      res.end();
+    }
+  });
+}
