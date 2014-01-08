@@ -1,0 +1,26 @@
+<% content_for :title do %>Home<% end %>
+
+<div id="wrapper">
+	<% if flash[:notice] %>
+		<p><%= flash[:notice] %></p>
+	<% end %>
+
+	<%= simple_form_for(@idea) do |f| %>
+	  <%= f.input :content, label: "Post something witty:" %>
+	  <%= f.submit "Post", :class => "btn btn-primary" %>
+	<% end %>
+
+	<dl class="dl-horizontal">
+		<% @ideas.each do |idea| %>
+			<dt><%= idea.user.first_name + " says:" %></dt>
+			<dd>
+				<%= idea.content %>
+				<p>
+					<%= link_to 'Like', { :controller => "likes", :action => "create", :idea_id => idea.id }, :method => :post %>
+					<%= idea.likes.count %>
+					<%= link_to "People", { :controller => "ideas", :action => "show", :id => idea.id }, :method => :get %> like this
+				</p>
+			</dd>
+		<% end %>
+	</dl>
+</div>

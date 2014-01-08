@@ -13,9 +13,9 @@
 		<% @invites.each do |invite| %>	
 			<tr>
 				<td><%= invite.user.first_name + " " + invite.user.last_name %></td>
-				<td><%= link_to 'Accept', friendships_path, :method => :put %></td>
+				<td><%= link_to 'Accept', friendship_path(invite), :method => :put %></td>
 				<td>
-					<%= link_to 'Ignore', friendships_path(invite), :method => :delete,
+					<%= link_to 'Ignore', friendship_path(invite), :method => :delete,
 					confirm: 'Are you sure you want to delete friend invite?' %>
 				</td>
 			</tr>
@@ -36,7 +36,9 @@
 			<tr>
 				<td><%= other_user.first_name + " " + other_user.last_name %></td>
 				<td><%= other_user.email %></td>
-				<td><%= link_to 'Add as Friend', friendships_path(other_user), :method => :post %></td>
+				<td>
+					<%= link_to 'Add as Friend', { :controller => "friendships", :action => "create", :friend_id => other_user.id }, :method => :post %>
+				</td>
 			</tr>
 			<% end %>
 		</tbody>

@@ -1,0 +1,28 @@
+// Place all the styles related to the Ideas controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#wrapper{
+	width: 800px;
+	margin: 0px auto;
+}
+
+.btn{
+	margin-top: 10px;
+}
+
+dl{
+	margin-top: 50px;
+}
+
+a:first-child{
+	margin-right: 20px;
+}
+
+p{
+	padding-bottom: 10px;
+}
+
+.idea{
+	font-size: 1.5em;
+}

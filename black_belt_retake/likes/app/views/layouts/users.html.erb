@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= yield :title %></title>
+  <%= stylesheet_link_tag    "users", "bootstrap" %>
+  <%= javascript_include_tag "users", "bootstrap", "jquery", "rails" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+	<ul class="nav navbar-nav">
+		<li><a href="/login">Login</a></li>
+	</ul>
+</nav>
+
+<%= yield %>
+
+</body>
+</html>

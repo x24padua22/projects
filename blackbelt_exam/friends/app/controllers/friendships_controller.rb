@@ -1,10 +1,12 @@
 class FriendshipsController < ApplicationController
+  include SessionsHelper
+
   def edit
     @friendship = Friendship.find(:id)
   end
 
   def update
-  	@friendship = Friendship.find(:id)
+  	@friendship = Friendship.find(params[:id])
   	
   	if @friendship.update_attributes(:status_id => 1)
   		flash[:notice] = "Successfully accepted friend invite!"
@@ -13,10 +15,11 @@ class FriendshipsController < ApplicationController
   	end	
 
   	redirect_to :back
+    #render :text => params[:id]
   end
 
   def destroy
-  	@friendship = Friendship.find(:id)
+  	@friendship = Friendship.find(params[:id])
   	
   	if @friendship.destroy
   		flash[:notice] = "Ignore success!"
@@ -34,7 +37,7 @@ class FriendshipsController < ApplicationController
   def create
   	@friendship = Friendship.new()
     @friendship.user_id = current_user.id
-    @friendship.friend_id = params[:id]
+    @friendship.friend_id = params[:friend_id]
     @friendship.status_id = 2
     
     if @friendship.save
