@@ -1,0 +1,21 @@
+// Place all the styles related to the Users controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#wrapper{
+	width: 800px;
+	margin: 0px auto;
+}
+
+input{
+	width: 200px;
+}
+
+label{
+	margin-top: 10px;
+}
+
+input[type=submit]{
+	width: auto;
+	margin-top: 10px;
+}

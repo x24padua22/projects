@@ -1,0 +1,28 @@
+<% content_for :title do %>Home<% end %>
+
+<div id="wrapper">
+	<dl class="dl-horizontal">
+		<dt class="idea"><%= @idea.user.first_name + " says:" %></dt>
+		<dd class="idea"><%= @idea.content %></dd>
+	</dl>
+
+	<p>People who liked this post:</p>
+
+	<table class="table table-bordered table-striped">
+		<thead>
+			<th>
+				<td>Name</td>
+				<td>Email</td>
+			</th>
+		</thead>
+		<tbody>
+			<% @likes.each do |like| %>
+				<tr>
+					<td><%= like.user.id %></td>
+					<td><%= like.user.first_name + " " + like.user.last_name %></td>
+					<td><%= like.user.email %></td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+</div>
