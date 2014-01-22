@@ -21,7 +21,11 @@ img{
 	height: 45px;
 	width: 45px;
 	border: 1px solid black;
-	margin: 15px 0px 0px 1px;
+	margin-right: 5px;
+}
+
+#left_panel ul li{
+	margin: 10px 0px;
 }
 
 #main_contents{
@@ -29,9 +33,13 @@ img{
 	padding: 15px;
 }
 
-textarea{
+textarea.form-control{
 	width: 550px;
-	height: 100px;
+	min-height: 100px;
+}
+
+#main_contents form .pull-right{
+	width: 100px;
 }
 
 nav{

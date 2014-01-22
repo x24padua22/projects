@@ -80,7 +80,7 @@
 	$dragon->fly();
 	$dragon->displayHealth();
 	
-	//the following is just to see that the fly() and pet() methods do not work with class Animal.
+	//the following is just to show that the fly() and pet() methods do not work with class Animal.
 	$animal = new Animal("animal");
 	$animal->fly();
 	$animal->pet();
