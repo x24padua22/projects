@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>Profile</title>
+	<link rel="stylesheet" type="text/css" href="stylesheets/times.css">
+	<link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.css">
+	<script src="./javascripts/jquery.js"></script>
+	<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			Date.prototype.timeNow = function () {
+			     return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
+			}
+
+			var time = new Date().timeNow();
+			$("#time").text(time);
+
+			io = io.connect();
+
+			io.emit("get_user_info");
+
+			io.on("user_info", function(data){
+				$("#left_panel p:first-of-type").text(data.user_name);
+				$("#left_panel p:first-of-type").attr("id", data.id);
+
+				for(var i in data.other_online_users)
+				{
+					if(data.other_online_users[i].id != $("#left_panel p:first-of-type").attr("id"))
+					{
+						$("#left_panel ul").append("<li id='"+data.other_online_users[i].id+"'><img><p>"+data.other_online_users[i].name+"</p></li>");
+					}
+				}
+			});
+
+			io.on("new_user", function(data){
+				$("#left_panel ul").append("<li id='"+data.id+"'><img><p>"+data.name+"</p></li>")
+			});
+
+			
+			$("#logout").click(function(e){
+				e.preventDefault();
+				io.emit("logout", {id: $("#left_panel p:first-of-type").attr("id")});
+			});
+
+			io.on("user_logged_out", function(data){
+				$("#"+data.id).remove();
+			});
+
+			io.on("redirect_to_index", function(data){
+				window.location.replace(data.url);
+			})
+		});
+	</script>
+</head>
+<body>
+	<div id="wrapper">
+		<div id="left_panel" class="pull-left">
+			<img src="">
+			<p></p>
+			<h5>Online Villagers</h5>
+			<ul class="list-unstyled"></ul>
+		</div>
+		<div id="main_contents" class="pull-right">
+			<form id="clock_in">
+				<textarea name="description" class="pull-left form-control"></textarea>
+				<div class="pull-right">
+					<input type="submit" value="Clock-in" class="btn btn-primary" />
+					<label id="time"></label>
+				</div>
+				<div class="clearfix"></div>
+			</form>
+
+			<ul class="list-inline">
+				<li><a href="/wall" id="active">Wall</a></li>
+				<li><a href="/profile">Profile</a></li>
+				<li><a href="" id="logout">Logout</a></li>
+				<div class="clearfix"></div>
+			</ul>
+
+			<table class="table table-striped table-bordered">
+				<thead>
+					<tr>
+						<th>Task</th>
+						<th>Hours Spent</th>
+						<th>Date</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Review Codes of Students</td>
+						<td>2h</td>
+						<td>Jan 5 2014</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

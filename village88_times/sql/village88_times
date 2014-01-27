@@ -1,0 +1,96 @@
+CREATE DATABASE  IF NOT EXISTS `village88_times` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `village88_times`;
+-- MySQL dump 10.13  Distrib 5.6.13, for Win32 (x86)
+--
+-- Host: 127.0.0.1    Database: village88_times
+-- ------------------------------------------------------
+-- Server version	5.6.12-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `clock_records`
+--
+
+DROP TABLE IF EXISTS `clock_records`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `clock_records` (
+  `id` tinyint(4) NOT NULL AUTO_INCREMENT,
+  `user_id` tinyint(4) NOT NULL,
+  `description` text,
+  `clock_in_time` datetime DEFAULT NULL,
+  `clock_out_time` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`,`user_id`),
+  KEY `user_id_idx` (`user_id`),
+  CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `clock_records`
+--
+
+LOCK TABLES `clock_records` WRITE;
+/*!40000 ALTER TABLE `clock_records` DISABLE KEYS */;
+INSERT INTO `clock_records` VALUES (1,1,'Finished the clock in/out function','2014-01-27 07:37:47',NULL,'2014-01-27 07:37:47',NULL),(2,2,'Display clock in/out activities','2014-01-27 08:25:30',NULL,'2014-01-27 08:25:30',NULL),(3,2,'Broadcast new clock-in activity','2014-01-27 08:39:24',NULL,'2014-01-27 08:39:24',NULL),(4,3,'organized the time','2014-01-27 08:41:47',NULL,'2014-01-27 08:41:47',NULL);
+/*!40000 ALTER TABLE `clock_records` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `id` tinyint(4) NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(60) NOT NULL,
+  `last_name` varchar(60) NOT NULL,
+  `email` varchar(120) NOT NULL,
+  `password` varchar(120) NOT NULL,
+  `user_level` tinyint(1) DEFAULT NULL,
+  `time_zone` tinyint(1) DEFAULT NULL,
+  `photo_url` text,
+  `created_at` datetime DEFAULT NULL,
+  `udpated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'Rozen','Macapagal','rmacapagal@village88.com','12345678',9,8,NULL,NULL,NULL),(2,'Zen','Macapagal','zen.macapagal@gmail.com','12345678',1,8,NULL,NULL,NULL),(3,'Michael','Choi','mchoi@village88.com','12345678',1,8,NULL,NULL,NULL);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping events for database 'village88_times'
+--
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2014-01-27 17:01:30

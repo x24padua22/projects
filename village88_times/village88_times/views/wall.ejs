@@ -1,0 +1,133 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>Wall</title>
+	<link rel="stylesheet" type="text/css" href="stylesheets/times.css">
+	<link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.css">
+	<script src="./javascripts/jquery.js"></script>
+	<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			var date = new Date();
+			var hour = date.getHours();
+			var am_pm = "am";
+
+			if(hour >= 13)
+			{
+				hour = hour - 12;
+				am_pm = "pm";
+			}
+
+			$("#time").text(hour+":"+date.getMinutes()+" "+am_pm);
+
+			io = io.connect();
+
+			io.emit("get_user_info");
+
+			io.on("user_info", function(data){
+				$("#left_panel p:first-of-type").text(data.user_name);
+				$("#left_panel p:first-of-type").attr("id", data.id);
+
+				for(var i in data.other_online_users)
+				{
+					if(data.other_online_users[i].id != $("#left_panel p:first-of-type").attr("id"))
+					{
+						$("#left_panel ul").append("<li id='"+data.other_online_users[i].id+"'><img><p>"+data.other_online_users[i].name+"</p></li>");
+					}
+				}
+			});
+
+			io.on("new_user", function(data){
+				$("#left_panel ul").append("<li id='"+data.id+"'><img><p>"+data.name+"</p></li>")
+			});
+
+			$("#clock_in").submit(function(e){
+				e.preventDefault();
+				io.emit("clock_in", {
+					id: $("#left_panel p:first-of-type").attr("id"),
+					name: $("#left_panel p:first-of-type").val(),
+					description: $("#description").val()
+				});
+			});
+
+			$("#logout").click(function(e){
+				e.preventDefault();
+				io.emit("logout", {id: $("#left_panel p:first-of-type").attr("id")});
+			});
+
+			io.on("user_logged_out", function(data){
+				$("#"+data.id).remove();
+			});
+
+			io.on("redirect_to_index", function(data){
+				window.location.replace(data.url);
+			})
+
+			io.on("clock_record_success", function(data){
+				var recorded_time = new Date(data.time);
+				var recorded_hour = recorded_time.getHours() + 8;
+				var am_pm = am;
+
+				if(recorded_hour >= 13)
+				{
+					recorded_hour = recorded_hour - 12;
+					am_pm = pm;
+				}
+
+				if(data.description)
+				{
+					$("#clock_activities ul").append(
+						"<li><p><span class='text-primary'>"
+						+recorded_hour+am_pm+":"+recorded_time.getMinutes()+" </span>"
+						+data.user+" clocked in a task: "+data.description+"</p></li>"
+					);
+				}
+				else
+				{
+					$("#clock_activities ul").append(
+						"<li><p><span class='text-primary'>"
+						+recorded_hour+am_pm+":"+recorded_time.getMinutes()+" </span>"
+						+data.user+" has clocked in.</p></li>"
+					);
+				}
+			});
+
+			io.on("clock_records", function(data){
+				console.log(data.clock_records);
+			});
+		});
+	</script>
+</head>
+<body>
+	<div id="wrapper">
+		<div id="left_panel" class="pull-left">
+			<img src="">
+			<p></p>
+			<h5>Online Villagers</h5>
+			<ul class="list-unstyled"></ul>
+		</div>
+		<div id="main_contents" class="pull-right">
+			<form id="clock_in">
+				<textarea id="description" class="pull-left form-control"></textarea>
+				<div class="pull-right">
+					<input type="submit" value="Clock-in" class="btn btn-primary" />
+					<label id="time"></label>
+				</div>
+				<div class="clearfix"></div>
+			</form>
+
+			<ul class="list-inline">
+				<li><a href="/wall" id="active">Wall</a></li>
+				<li><a href="/profile">Profile</a></li>
+				<li><a href="" id="logout">Logout</a></li>
+				<div class="clearfix"></div>
+			</ul>
+
+			<div id="clock_activities">
+				<ul class="list-unstyled"></ul>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
