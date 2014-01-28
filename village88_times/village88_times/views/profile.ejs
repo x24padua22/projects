@@ -5,16 +5,29 @@
 	<title>Profile</title>
 	<link rel="stylesheet" type="text/css" href="stylesheets/times.css">
 	<link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.css">
-	<script src="./javascripts/jquery.js"></script>
+		<script src="./javascripts/jquery.js"></script>
 	<script src="http://localhost:3000/socket.io/socket.io.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
-			Date.prototype.timeNow = function () {
-			     return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
-			}
+			var date = new Date();
+			var hour = date.getHours();
+			var minute = date.getMinutes();
+			var am_pm = "am";
 
-			var time = new Date().timeNow();
-			$("#time").text(time);
+			if(hour >= 13)
+			{
+				hour = hour - 12;
+				am_pm = "pm";
+			}
+			else if(hour == 12)
+				am_pm = "pm"
+			else if(hour == 0)
+				hour = 12;
+
+			if(minute < 10)
+				minute = "0"+minute;
+
+			$("#time").text(hour+":"+minute+" "+am_pm);
 
 			io = io.connect();
 
@@ -23,6 +36,9 @@
 			io.on("user_info", function(data){
 				$("#left_panel p:first-of-type").text(data.user_name);
 				$("#left_panel p:first-of-type").attr("id", data.id);
+
+				io.emit("check_last_clock_record", {id: $("#left_panel p:first-of-type").attr("id")});
+				io.emit("get_user_clock_records", {id: $("#left_panel p:first-of-type").attr("id")});
 
 				for(var i in data.other_online_users)
 				{
@@ -37,7 +53,71 @@
 				$("#left_panel ul").append("<li id='"+data.id+"'><img><p>"+data.name+"</p></li>")
 			});
 
-			
+			io.on("use_clock_in", function(data){
+				$(".btn").attr("value", "Clock-in");
+			});
+
+			io.on("use_clock_out", function(data){
+				$(".btn").attr("value", "Clock-out");
+			});
+
+			io.on("user_clock_records", function(data){
+				var month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+				for(var i in data.user_activities)
+				{
+					if(data.user_activities[i].clock_out_time == "")
+					{
+						var d = data.user_activities[i].clock_in_time.split(/[- :]/);
+						var date = month[d[1]-1]+" "+d[2][0]+d[2][1]+", "+d[0];
+
+						if(data.user_activities[i].description == "")
+						{
+							$("table tbody").append("<tr><td>Clocked-in.</td><td></td><td>"+date+"</td></tr>");
+						}
+						else
+						{
+							$("table tbody").append("<tr><td>"+data.user_activities[i].description+"</td><td></td><td>"+date+"</td></tr>");
+						}
+					}
+					else
+					{
+						var d = data.user_activities[i].clock_out_time.split(/[- :]/);
+						var date = month[d[1]-1]+" "+d[2][0]+d[2][1]+", "+d[0];
+
+						if(data.user_activities[i].description == "")
+						{
+							$("table tbody").append("<tr><td>Clocked-out.</td><td></td><td>"+date+"</td></tr>");
+						}
+						else
+						{
+							$("table tbody").append("<tr><td>"+data.user_activities[i].description+"</td><td></td><td>"+date+"</td></tr>");
+						}
+					}
+				}
+			});
+
+			$("#clock_in").submit(function(e){
+				e.preventDefault();
+
+				if($("button").attr("value") == "Clock-in")
+				{
+					io.emit("clock_in", {
+						id: $("#left_panel p:first-of-type").attr("id"),
+						name: $("#left_panel p:first-of-type").val(),
+						description: $("#description").val()
+					});
+				}
+				else
+				{
+					io.emit("clock_out", {
+						id: $("#left_panel p:first-of-type").attr("id"),
+						name: $("#left_panel p:first-of-type").val(),
+						description: $("#description").val()
+					});
+				}
+			});
+
 			$("#logout").click(function(e){
 				e.preventDefault();
 				io.emit("logout", {id: $("#left_panel p:first-of-type").attr("id")});
@@ -63,17 +143,17 @@
 		</div>
 		<div id="main_contents" class="pull-right">
 			<form id="clock_in">
-				<textarea name="description" class="pull-left form-control"></textarea>
+				<textarea id="description" class="pull-left form-control"></textarea>
 				<div class="pull-right">
-					<input type="submit" value="Clock-in" class="btn btn-primary" />
+					<input type="submit" class="btn btn-primary" />
 					<label id="time"></label>
 				</div>
 				<div class="clearfix"></div>
 			</form>
 
 			<ul class="list-inline">
-				<li><a href="/wall" id="active">Wall</a></li>
-				<li><a href="/profile">Profile</a></li>
+				<li><a href="/wall">Wall</a></li>
+				<li><a href="/profile" id="active">Profile</a></li>
 				<li><a href="" id="logout">Logout</a></li>
 				<div class="clearfix"></div>
 			</ul>
@@ -86,13 +166,7 @@
 						<th>Date</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr>
-						<td>Review Codes of Students</td>
-						<td>2h</td>
-						<td>Jan 5 2014</td>
-					</tr>
-				</tbody>
+				<tbody></tbody>
 			</table>
 		</div>
 	</div>

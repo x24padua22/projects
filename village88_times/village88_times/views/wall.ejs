@@ -11,6 +11,7 @@
 		$(document).ready(function(){
 			var date = new Date();
 			var hour = date.getHours();
+			var minute = date.getMinutes();
 			var am_pm = "am";
 
 			if(hour >= 13)
@@ -18,16 +19,26 @@
 				hour = hour - 12;
 				am_pm = "pm";
 			}
+			else if(hour == 12)
+				am_pm = "pm"
+			else if(hour == 0)
+				hour = 12;
 
-			$("#time").text(hour+":"+date.getMinutes()+" "+am_pm);
+			if(minute < 10)
+				minute = "0"+minute;
+
+			$("#time").text(hour+":"+minute+" "+am_pm);
 
 			io = io.connect();
 
 			io.emit("get_user_info");
+			io.emit("get_clock_records");
 
 			io.on("user_info", function(data){
 				$("#left_panel p:first-of-type").text(data.user_name);
 				$("#left_panel p:first-of-type").attr("id", data.id);
+
+				io.emit("check_last_clock_record", {id: $("#left_panel p:first-of-type").attr("id")});
 
 				for(var i in data.other_online_users)
 				{
@@ -42,13 +53,127 @@
 				$("#left_panel ul").append("<li id='"+data.id+"'><img><p>"+data.name+"</p></li>")
 			});
 
+			io.on("use_clock_in", function(data){
+				$(".btn").attr("value", "Clock-in");
+			});
+
+			io.on("use_clock_out", function(data){
+				$(".btn").attr("value", "Clock-out");
+			});
+
+			io.on("clock_records", function(data){
+				for(var i in data.clock_records)
+				{
+					if(data.clock_records[i].clock_in_time == "")
+					{
+						var clock_in = new Date(data.clock_records[i].clock_out_time);
+						var c_hour = clock_in.getHours();
+						var c_minute = clock_in.getMinutes();
+						var c_am_pm = "am";
+
+						if(c_hour >= 13)
+						{
+							c_hour = c_hour - 12;
+							c_am_pm = "pm";
+						}
+						else if(c_hour == 12)
+							c_am_pm = "pm";
+						else if(c_hour == 0)
+							c_hour = 12;
+
+						if(c_minute < 10)
+							c_minute = "0"+c_minute;
+
+						if(data.clock_records[i].description)
+						{
+							$("#clock_activities ul").append("<li><p><span class='text-primary'>"+c_hour+":"+c_minute+" "+am_pm+"</span> "+data.clock_records[i].first_name+" clocked in a task: '"+data.clock_records[i].description+"'</p></li>");
+						}
+						else
+						{
+							$("#clock_activities ul").append("<li><p><span class='text-primary'>"+c_hour+":"+c_minute+" "+am_pm+" </span>"+data.clock_records[i].first_name+" has clocked in.</p></li>");	
+						}
+					}
+					else
+					{
+						var clock_in = new Date(data.clock_records[i].clock_in_time);
+						var c_hour = clock_in.getHours();
+						var c_minute = clock_in.getMinutes();
+						var c_am_pm = "am";
+
+						if(c_hour >= 13)
+						{
+							c_hour = c_hour - 12;
+							c_am_pm = "pm";
+						}
+						else if(c_hour == 12)
+							c_am_pm = "pm";
+						else if(c_hour == 0)
+							c_hour = 12;
+
+						if(c_minute < 10)
+							c_minute = "0"+c_minute;
+
+						if(data.clock_records[i].description)
+						{
+							$("#clock_activities ul").append("<li><p><span class='text-primary'>"+c_hour+":"+c_minute+" "+am_pm+"</span> "+data.clock_records[i].first_name+" clocked in a task: '"+data.clock_records[i].description+"'</p></li>");
+						}
+						else
+						{
+							$("#clock_activities ul").append("<li><p><span class='text-primary'>"+c_hour+":"+c_minute+" "+am_pm+" </span>"+data.clock_records[i].first_name+" has clocked in.</p></li>");	
+						}
+					}
+					
+				}
+			});
+
 			$("#clock_in").submit(function(e){
 				e.preventDefault();
-				io.emit("clock_in", {
-					id: $("#left_panel p:first-of-type").attr("id"),
-					name: $("#left_panel p:first-of-type").val(),
-					description: $("#description").val()
-				});
+				
+				if($("button").attr("value") == "Clock-in")
+				{
+					io.emit("clock_in", {
+						id: $("#left_panel p:first-of-type").attr("id"),
+						name: $("#left_panel p:first-of-type").val(),
+						description: $("#description").val()
+					});
+				}
+				else
+				{
+					io.emit("clock_out", {
+						id: $("#left_panel p:first-of-type").attr("id"),
+						name: $("#left_panel p:first-of-type").val(),
+						description: $("#description").val()
+					});
+				}
+			});
+
+			io.on("clock_record_success", function(data){
+				var recorded_time = new Date(data.time);
+				var recorded_hour = recorded_time.getHours();
+				var am_pm = "am";
+
+				if(recorded_hour >= 13)
+				{
+					recorded_hour = recorded_hour - 12;
+					am_pm = "pm";
+				}
+
+				if(data.description)
+				{
+					$("#clock_activities ul").append(
+						"<li><p><span class='text-primary'>"
+						+recorded_hour+":"+recorded_time.getMinutes()+am_pm+" </span>"
+						+data.user+" clocked in a task: "+data.description+"</p></li>"
+					);
+				}
+				else
+				{
+					$("#clock_activities ul").append(
+						"<li><p><span class='text-primary'>"
+						+recorded_hour+am_pm+":"+recorded_time.getMinutes()+" </span>"
+						+data.user+" has clocked in.</p></li>"
+					);
+				}
 			});
 
 			$("#logout").click(function(e){
@@ -63,39 +188,6 @@
 			io.on("redirect_to_index", function(data){
 				window.location.replace(data.url);
 			})
-
-			io.on("clock_record_success", function(data){
-				var recorded_time = new Date(data.time);
-				var recorded_hour = recorded_time.getHours() + 8;
-				var am_pm = am;
-
-				if(recorded_hour >= 13)
-				{
-					recorded_hour = recorded_hour - 12;
-					am_pm = pm;
-				}
-
-				if(data.description)
-				{
-					$("#clock_activities ul").append(
-						"<li><p><span class='text-primary'>"
-						+recorded_hour+am_pm+":"+recorded_time.getMinutes()+" </span>"
-						+data.user+" clocked in a task: "+data.description+"</p></li>"
-					);
-				}
-				else
-				{
-					$("#clock_activities ul").append(
-						"<li><p><span class='text-primary'>"
-						+recorded_hour+am_pm+":"+recorded_time.getMinutes()+" </span>"
-						+data.user+" has clocked in.</p></li>"
-					);
-				}
-			});
-
-			io.on("clock_records", function(data){
-				console.log(data.clock_records);
-			});
 		});
 	</script>
 </head>
@@ -111,7 +203,7 @@
 			<form id="clock_in">
 				<textarea id="description" class="pull-left form-control"></textarea>
 				<div class="pull-right">
-					<input type="submit" value="Clock-in" class="btn btn-primary" />
+					<input type="submit" class="btn btn-primary" />
 					<label id="time"></label>
 				</div>
 				<div class="clearfix"></div>
