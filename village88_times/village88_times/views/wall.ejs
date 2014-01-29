@@ -38,8 +38,6 @@
 				$("#left_panel p:first-of-type").text(data.user_name);
 				$("#left_panel p:first-of-type").attr("id", data.id);
 
-				io.emit("check_last_clock_record", {id: $("#left_panel p:first-of-type").attr("id")});
-
 				for(var i in data.other_online_users)
 				{
 					if(data.other_online_users[i].id != $("#left_panel p:first-of-type").attr("id"))
@@ -47,6 +45,8 @@
 						$("#left_panel ul").append("<li id='"+data.other_online_users[i].id+"'><img><p>"+data.other_online_users[i].name+"</p></li>");
 					}
 				}
+
+				io.emit("check_last_clock_record", {id: $("#left_panel p:first-of-type").attr("id")});
 			});
 
 			io.on("new_user", function(data){
