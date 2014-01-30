@@ -9,25 +9,29 @@
 	<script src="http://localhost:3000/socket.io/socket.io.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
-			var date = new Date();
-			var hour = date.getHours();
-			var minute = date.getMinutes();
-			var am_pm = "am";
-
-			if(hour >= 13)
+			function get_time(date)
 			{
-				hour = hour - 12;
-				am_pm = "pm";
+				var hour = date.getHours();
+				var minute = date.getMinutes();
+				var am_pm = "am";
+
+				if(hour >= 13)
+				{
+					hour -= 12;
+					am_pm = "pm";
+				}
+				else if(hour == 12)
+					am_pm = "pm"
+				else if(hour == 0)
+					hour = 12;
+
+				if(minute < 10)
+					minute = "0"+minute;
+
+				return hour+":"+minute+" "+am_pm;
 			}
-			else if(hour == 12)
-				am_pm = "pm"
-			else if(hour == 0)
-				hour = 12;
 
-			if(minute < 10)
-				minute = "0"+minute;
-
-			$("#time").text(hour+":"+minute+" "+am_pm);
+			$("#time").text(get_time(new Date()));
 
 			io = io.connect();
 
@@ -35,87 +39,119 @@
 
 			io.on("user_info", function(data){
 				$("#left_panel p:first-of-type").text(data.user_name);
-				$("#left_panel p:first-of-type").attr("id", data.id);
+				$("#left_panel p:first-of-type").attr("id", data.user_id);
 
-				for(var i in data.other_online_users)
+				for(var index in data.other_online_users)
 				{
-					if(data.other_online_users[i].id != $("#left_panel p:first-of-type").attr("id"))
+					if(data.other_online_users[index].user_id != $("#left_panel p:first-of-type").attr("id"))
 					{
-						$("#left_panel ul").append("<li id='"+data.other_online_users[i].id+"'><img><p>"+data.other_online_users[i].name+"</p></li>");
+						$("#left_panel ul").append("<li id='"+data.other_online_users[index].user_id+"'><img><p>"+data.other_online_users[index].user_name+"</p></li>");
 					}
 				}
 
-				io.emit("check_last_clock_record", {id: $("#left_panel p:first-of-type").attr("id")});
-				io.emit("get_user_clock_records", {id: $("#left_panel p:first-of-type").attr("id")});
+				io.emit("check_last_clock_record", {user_id: $("#left_panel p:first-of-type").attr("id")});
+				io.emit("get_user_clock_records", {user_id: $("#left_panel p:first-of-type").attr("id")});
 			});
 
 			io.on("new_user", function(data){
-				$("#left_panel ul").append("<li id='"+data.id+"'><img><p>"+data.name+"</p></li>")
+				$("#left_panel ul").append("<li id='"+data.user_id+"'><img><p>"+data.user_name+"</p></li>")
 			});
 
-			io.on("use_clock_in", function(data){
-				$(".btn").attr("value", "Clock-in");
-			});
-
-			io.on("use_clock_out", function(data){
-				$(".btn").attr("value", "Clock-out");
+			io.on("clock_record_form_values", function(data){
+				$(".btn").attr("value", data.clock_button_value);
+				$("textarea").attr("placeholder", data.description);
 			});
 
 			io.on("user_clock_records", function(data){
 				var month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+				var clock_in_time = 0;
+				var clock_out_time = 0;
 
-				for(var i in data.user_activities)
+				if(data.user_activities[0].clock_in_time)
 				{
-					var clock_in = data.user_activities[i].clock_in_time;
-					var clock_out = data.user_activities[i].clock_out_time
+					console.log(data.user_activities);
+					d = data.user_activities[0].clock_in_time.split(/[- :]/);
+					date = month[d[1]-1]+" "+d[2][0]+d[2][1]+", "+d[0];
 
-					if(clock_in)
-						var d = clock_in.split(/[- :]/);
-					
-					if(clock_out)
-						var d = clock_out.split(/[- :]/);
-					
-					var date = month[d[1]-1]+" "+d[2][0]+d[2][1]+", "+d[0];
+					if(data.user_activities[0].description)
+						$("table tbody").append("<tr><td>"+data.user_activities[0].description+"</td><td></td><td>"+date+"</td></tr>");
+					else
+						$("table tbody").append("<tr><td>Clocked in.</td><td></td><td>"+date+"</td></tr>");
 
-					if(data.user_activities[i].description == "")
+					console.log(data.user_activities[0]);
+					delete data.user_activities[0];
+					console.log(data.user_activities);
+					console.log(data.user_activities[0]);
+				}
+
+				for(var index in data.user_activities)
+				{
+					if(data.user_activities[index].clock_in_time)
 					{
-						$("table tbody").append("<tr><td>Clocked-in.</td><td></td><td>"+date+"</td></tr>");
+						d = data.user_activities[index].clock_in_time.split(/[- :]/);
+						clock_in_time = d[2][3] + d[2][4] + d[3] + d[4][0] + d[4][1];
 					}
 					else
 					{
-						$("table tbody").append("<tr><td>"+data.user_activities[i].description+"</td><td></td><td>"+date+"</td></tr>");
+						d = data.user_activities[index].clock_out_time.split(/[- :]/);
+						clock_out_time = d[2][3] + d[2][4] + d[3] + d[4][0] + d[4][1];
+					}
+					
+					date = month[d[1]-1]+" "+d[2][0]+d[2][1]+", "+d[0];
+
+					if(data.user_activities[index].description)
+						description = data.user_activities[index].description;
+
+					if(clock_in_time != 0 && clock_out_time != 0)
+					{
+						time_difference = (clock_in_time - clock_out_time)/-10000;
+						Number.prototype.round = function(places) {
+							return +(Math.round(this + "e+" + places)  + "e-" + places);
+						}
+						hours = time_difference.round(0);
+						minutes = (((time_difference - hours)*100)/60).round(2);
+						hours_spent = hours+minutes;
+						clock_in_time = 0;
+						clock_out_time = 0;
+
+						$("table tbody").append("<tr><td>"+description+"</td><td>"+hours_spent+"h</td><td>"+date+"</td></tr>");
 					}
 				}
 			});
 
 			$("#clock_in").submit(function(e){
 				e.preventDefault();
-
-				if($("button").attr("value") == "Clock-in")
-				{
-					io.emit("clock_in", {
-						id: $("#left_panel p:first-of-type").attr("id"),
-						name: $("#left_panel p:first-of-type").val(),
-						description: $("#description").val()
-					});
-				}
+				
+				if($(".btn").val() == "Clock-in")
+					clock_value = "clock-in";
 				else
-				{
-					io.emit("clock_out", {
-						id: $("#left_panel p:first-of-type").attr("id"),
-						name: $("#left_panel p:first-of-type").val(),
-						description: $("#description").val()
-					});
-				}
+					clock_value = "clock-out";
+
+				io.emit("new_clock_record", {
+					user_id: $("#left_panel p:first-of-type").attr("id"),
+					user_name: $("#left_panel p:first-of-type").val(),
+					description: $("#description").val(),
+					clock_in_or_out: clock_value
+				});
+			});
+
+			io.on("user_success", function(data){
+				if(data.clock_value == "clock_in_time")
+					alert("Successfully clocked in!");
+				else
+					alert("Successfully clocked out!");
+
+				io.emit("check_last_clock_record", {user_id: $("#left_panel p:first-of-type").attr("id")});
+				io.emit("get_user_clock_records", {user_id: $("#left_panel p:first-of-type").attr("id")});
 			});
 
 			$("#logout").click(function(e){
 				e.preventDefault();
-				io.emit("logout", {id: $("#left_panel p:first-of-type").attr("id")});
+				io.emit("logout", {user_id: $("#left_panel p:first-of-type").attr("id")});
 			});
 
 			io.on("user_logged_out", function(data){
-				$("#"+data.id).remove();
+				$("#"+data.user_id).remove();
 			});
 
 			io.on("redirect_to_index", function(data){
