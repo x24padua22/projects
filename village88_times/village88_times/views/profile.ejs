@@ -31,21 +31,24 @@
 				return hour+":"+minute+" "+am_pm;
 			}
 
-			$("#time").text(get_time(new Date()));
+			setInterval(function(){
+			    $("#time").text(get_time(new Date()));
+			}, 1000);
 
 			io = io.connect();
 
 			io.emit("get_user_info");
 
 			io.on("user_info", function(data){
+				$("#left_panel img:first-of-type").attr("src", data.photo_url);
 				$("#left_panel p:first-of-type").text(data.user_name);
 				$("#left_panel p:first-of-type").attr("id", data.user_id);
 
-				for(var index in data.other_online_users)
+				for(var index in data.all_online_users)
 				{
-					if(data.other_online_users[index].user_id != $("#left_panel p:first-of-type").attr("id"))
+					if(data.all_online_users[index].user_id != $("#left_panel p:first-of-type").attr("id"))
 					{
-						$("#left_panel ul").append("<li id='"+data.other_online_users[index].user_id+"'><img><p>"+data.other_online_users[index].user_name+"</p></li>");
+						$("#left_panel ul").append("<li id='"+data.all_online_users[index].user_id+"'><img src='"+data.all_online_users[index].photo_url+"'><p>"+data.all_online_users[index].user_name+"</p></li>");
 					}
 				}
 
@@ -54,7 +57,7 @@
 			});
 
 			io.on("new_user", function(data){
-				$("#left_panel ul").append("<li id='"+data.user_id+"'><img><p>"+data.user_name+"</p></li>")
+				$("#left_panel ul").append("<li id='"+data.user_id+"'><img src='"+data.photo_url+"'><p>"+data.user_name+"</p></li>")
 			});
 
 			io.on("clock_record_form_values", function(data){
@@ -69,7 +72,6 @@
 
 				if(data.user_activities[0].clock_in_time)
 				{
-					console.log(data.user_activities);
 					d = data.user_activities[0].clock_in_time.split(/[- :]/);
 					date = month[d[1]-1]+" "+d[2][0]+d[2][1]+", "+d[0];
 
@@ -78,10 +80,7 @@
 					else
 						$("table tbody").append("<tr><td>Clocked in.</td><td></td><td>"+date+"</td></tr>");
 
-					console.log(data.user_activities[0]);
 					delete data.user_activities[0];
-					console.log(data.user_activities);
-					console.log(data.user_activities[0]);
 				}
 
 				for(var index in data.user_activities)
@@ -104,17 +103,18 @@
 
 					if(clock_in_time != 0 && clock_out_time != 0)
 					{
-						time_difference = (clock_in_time - clock_out_time)/-10000;
 						Number.prototype.round = function(places) {
 							return +(Math.round(this + "e+" + places)  + "e-" + places);
 						}
+
+						time_difference = (clock_in_time - clock_out_time)/-10000;
 						hours = time_difference.round(0);
 						minutes = (((time_difference - hours)*100)/60).round(2);
 						hours_spent = hours+minutes;
 						clock_in_time = 0;
 						clock_out_time = 0;
 
-						$("table tbody").append("<tr><td>"+description+"</td><td>"+hours_spent+"h</td><td>"+date+"</td></tr>");
+						$("table tbody").append("<tr><td>"+description+"</td><td>"+Math.abs(hours_spent)+"h</td><td>"+date+"</td></tr>");
 					}
 				}
 			});
@@ -136,34 +136,19 @@
 			});
 
 			io.on("user_success", function(data){
-				if(data.clock_value == "clock_in_time")
-					alert("Successfully clocked in!");
-				else
-					alert("Successfully clocked out!");
-
-				io.emit("check_last_clock_record", {user_id: $("#left_panel p:first-of-type").attr("id")});
-				io.emit("get_user_clock_records", {user_id: $("#left_panel p:first-of-type").attr("id")});
-			});
-
-			$("#logout").click(function(e){
-				e.preventDefault();
-				io.emit("logout", {user_id: $("#left_panel p:first-of-type").attr("id")});
+				window.location.replace("/profile");
 			});
 
 			io.on("user_logged_out", function(data){
 				$("#"+data.user_id).remove();
 			});
-
-			io.on("redirect_to_index", function(data){
-				window.location.replace(data.url);
-			})
 		});
 	</script>
 </head>
 <body>
 	<div id="wrapper">
 		<div id="left_panel" class="pull-left">
-			<img src="">
+			<img id="user_img" src="">
 			<p></p>
 			<h5>Online Villagers</h5>
 			<ul class="list-unstyled"></ul>
@@ -181,20 +166,21 @@
 			<ul class="list-inline">
 				<li><a href="/wall">Wall</a></li>
 				<li><a href="/profile" id="active">Profile</a></li>
-				<li><a href="" id="logout">Logout</a></li>
 				<div class="clearfix"></div>
 			</ul>
 
-			<table class="table table-striped table-bordered">
-				<thead>
-					<tr>
-						<th>Task</th>
-						<th>Hours Spent</th>
-						<th>Date</th>
-					</tr>
-				</thead>
-				<tbody></tbody>
-			</table>
+			<div id="user_clock_records_table">
+				<table class="table table-striped table-bordered">
+					<thead>
+						<tr>
+							<th>Task</th>
+							<th>Hours Spent</th>
+							<th>Date</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
 		</div>
 	</div>
 </body>

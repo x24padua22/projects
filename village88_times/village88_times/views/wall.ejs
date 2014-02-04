@@ -31,7 +31,9 @@
 				return hour+":"+minute+" "+am_pm;
 			}
 
-			$("#time").text(get_time(new Date()));
+			setInterval(function(){
+			    $("#time").text(get_time(new Date()));
+			}, 1000);
 
 			io = io.connect();
 
@@ -39,14 +41,16 @@
 			io.emit("get_clock_records");
 
 			io.on("user_info", function(data){
+				$("#left_panel img:first-of-type").attr("src", data.photo_url);
 				$("#left_panel p:first-of-type").text(data.user_name);
 				$("#left_panel p:first-of-type").attr("id", data.user_id);
 
-				for(var index in data.other_online_users)
+
+				for(var index in data.all_online_users)
 				{
-					if(data.other_online_users[index].user_id != $("#left_panel p:first-of-type").attr("id"))
+					if(data.all_online_users[index].user_id != $("#left_panel p:first-of-type").attr("id"))
 					{
-						$("#left_panel ul").append("<li id='"+data.other_online_users[index].user_id+"'><img><p>"+data.other_online_users[index].user_name+"</p></li>");
+						$("#left_panel ul").append("<li id='"+data.all_online_users[index].user_id+"'><img src='"+data.all_online_users[index].photo_url+"'><p>"+data.all_online_users[index].user_name+"</p></li>");
 					}
 				}
 
@@ -54,7 +58,7 @@
 			});
 
 			io.on("new_user", function(data){
-				$("#left_panel ul").append("<li id='"+data.user_id+"'><img><p>"+data.user_name+"</p></li>")
+				$("#left_panel ul").append("<li id='"+data.user_id+"'><img src='"+data.photo_url+"'><p>"+data.user_name+"</p></li>");
 			});
 
 			io.on("clock_record_form_values", function(data){
@@ -70,21 +74,21 @@
 						time = new Date(data.clock_records[index].clock_in_time);
 
 						if(data.clock_records[index].description)
-							description = " clocked in a task: '" + data.clock_records[index].description + "'";
+							description = "clocked in a task: \"" + data.clock_records[index].description + "\"";
 						else
-							description = " has clocked in.";
+							description = "has clocked in.";
 					}
 					else
 					{
 						time = new Date(data.clock_records[index].clock_out_time);
 						
 						if(data.clock_records[index].description)
-							description = " clocked out a task: '" + data.clock_records[index].description + "'";
+							description = "clocked out a task: \"" + data.clock_records[index].description + "\"";
 						else
-							description = " has clocked out.";
+							description = "has clocked out.";
 					}
 
-					$("#clock_activities ul").append("<li><p><span class='text-primary'>"+get_time(time)+"</span> "+data.clock_records[index].first_name+description+"</p></li>");
+					$("#clock_activities ul").append("<li><p><span class='text-primary'>"+get_time(time)+"</span> "+"<span class='space'></span>"+data.clock_records[index].first_name+" "+description+"</p></li>");
 				}
 			});
 
@@ -104,49 +108,19 @@
 			});
 
 			io.on("clock_record_success", function(data){
-				var time = new Date(data.time);
-
-				if(data.clock_value == "clock_in_time")
-				{
-					if(data.description)
-						description =  " clocked in a task: '"+data.description+"'.";
-					else
-						description = " has clocked in.";
-				}
-				else
-				{
-					if(data.description)
-						description =  " clocked out a task: '"+data.description+"'.";
-					else
-						description = " has clocked out.";
-				}
-
-				$("#clock_activities ul").prepend(
-					"<li><p><span class='text-primary'>"+get_time(time)+" </span>"+data.user_name+" "+description+"</p></li>"
-				);
-
-				io.emit("check_last_clock_record", {user_id: $("#left_panel p:first-of-type").attr("id")});
-			});
-
-			$("#logout").click(function(e){
-				e.preventDefault();
-				io.emit("logout", {user_id: $("#left_panel p:first-of-type").attr("id")});
+				window.location.replace("/wall");
 			});
 
 			io.on("user_logged_out", function(data){
 				$("#"+data.user_id).remove();
 			});
-
-			io.on("redirect_to_index", function(data){
-				window.location.replace(data.url);
-			})
 		});
 	</script>
 </head>
 <body>
 	<div id="wrapper">
 		<div id="left_panel" class="pull-left">
-			<img src="">
+			<img id="user_img" src="">
 			<p></p>
 			<h5>Online Villagers</h5>
 			<ul class="list-unstyled"></ul>
@@ -164,7 +138,6 @@
 			<ul class="list-inline">
 				<li><a href="/wall" id="active">Wall</a></li>
 				<li><a href="/profile">Profile</a></li>
-				<li><a href="" id="logout">Logout</a></li>
 				<div class="clearfix"></div>
 			</ul>
 
