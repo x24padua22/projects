@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Group Chat</title>
+		<link rel='stylesheet' href='/stylesheets/style.css' />
+		<script src="./javascripts/jquery.js"></script>
+		<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+		<script>
+			$(document).ready(function(){
+				var name = prompt("Please enter your name:");
+				io = io.connect();
+				io.emit("got_a_new_user", {name: name});
+				
+				io.on("new_user", function(data){
+					$("#wrapper").append("<div class='box'><div class='box_name'>" + data.new_user_name + "</div><textarea class='box_content "+data.new_user_name+"'></textarea></div>");
+				});
+
+				io.on("existing_users", function(data){
+					for(var i in data.users)
+					{
+						$("#wrapper").append("<div class='box'><div class='box_name'>" + data.users[i] + "</div><textarea class='box_content "+data.users[i]+"'></textarea></div>");
+					}
+				});
+
+				$("#wrapper").on("keypress", ".box_content", function(e){
+					var classes = this.classList;
+					var name = classes[1];
+					var key_pressed = String.fromCharCode(e.which);
+					io.emit("updated_message", {sender: name, key: key_pressed});
+				});
+
+				io.on("message_update", function(data){
+					$("."+data.sender).append(data.message);
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div id="wrapper">
+		</div>
+	</body>
+</html>

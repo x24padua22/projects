@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Survey Form</title>
+		<link rel="stylesheet" href="./stylesheets/style.css">
+		<script src="./javascripts/jquery.js"></script>
+		<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				io = io.connect();
+				$("#survey_form").submit(function(e){
+					e.preventDefault();
+					io.emit("posting_form", {
+						name: $("#name").val(), 
+						location: $("#dojo_location").val(), 
+						language: $("#favorite_language").val(), 
+						comment: $("#comment").val()
+					});
+				});
+
+				io.on("updated_message", function(data){
+					$("#message").html(data.message);
+				});
+
+				io.on("random_number", function(data){
+					$("#number").html(data.number);
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div id="wrapper">
+			<div id="message"></div>
+			<div id="number"></div>
+			<form action="" id="survey_form">
+				<label for="name">Your Name:</label>
+				<input type="text" name="name" id="name" />
+				<label for="dojo_location">Dojo Location:</label>
+				<select name="dojo_location" id="dojo_location">
+					<option value="Mountain View">Mountain View</option>
+					<option value="Seattle">Seattle</option>
+				</select>
+				<label for="favorite_language">Favorite Language:</label>
+				<select name="favorite_language" id="favorite_language">
+					<option value="HTML">HTML</option>
+					<option value="Javascript">Javascript</option>
+					<option value="PHP">PHP</option>
+					<option value="RoR">Ruby on Rails</option>
+				</select>
+				<label for="comment">Comment (optional):</label>
+				<textarea name="comment" id="comment"></textarea>
+				<input type="submit"/>
+			</form>
+		</div>
+	</body>
+</html>

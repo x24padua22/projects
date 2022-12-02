@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Survey Form</title>
+		<link rel="stylesheet" href="./stylesheets/style.css">
+	</head>
+	<body>
+		<div id="wrapper">
+			<form action="/result" method="post">
+				<label>Your Name:</label>
+				<input type="text" name="name" />
+				<label>Dojo Location:</label>
+				<select name="dojo_location">
+					<option value="Mountain View">Mountain View</option>
+					<option value="Seattle">Seattle</option>
+				</select>
+				<label>Favorite Language:</label>
+				<select name="favorite_language">
+					<option value="HTML">HTML</option>
+					<option value="Javascript">Javascript</option>
+					<option value="PHP">PHP</option>
+					<option value="RoR">Ruby on Rails</option>
+				</select>
+				<label>Comment (optional):</label>
+				<textarea name="comment"></textarea>
+				<input type="submit" />
+			</form>
+		</div>
+	</body>
+</html>
